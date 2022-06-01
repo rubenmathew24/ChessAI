@@ -18,6 +18,8 @@ class King extends GamePiece{
 		
 		for(int[] move: possibleMoves)
         {
+			if(0 > move[0] || 7 < move[0] || 0 > move[1] || 7 < move[1])
+				continue;
             pos = 8*move[0]+move[1];
             if(this.isLegalMove(board, pos) < 2)
                 moves.add(pos);
