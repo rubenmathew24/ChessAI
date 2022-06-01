@@ -52,7 +52,6 @@ class Board
 			pos = (compressed[i] & 0b11111100)>>2;
 			hasMoved = (compressed[i] & 0b00000010)>>1 == 1;
 			color = i < 16;
-			board.put(pos, null);
 			if(i%16 < 8) // Piece is a pawn
 			{
 				if((compressed[(color?32:33)] & (1 << (i%8))) >> (i%8) == 1) // Pawn was promoted
@@ -78,7 +77,7 @@ class Board
 				} catch(Exception e) {System.err.print(e);}
 		}
 		if(!enPassant)
-			board.put(-1, null);
+			board.remove(-1);
 	}
 	
 	public void updatePossibleMoves()
