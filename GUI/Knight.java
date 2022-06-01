@@ -20,6 +20,9 @@ class Knight extends GamePiece{
 			if(0 <= pos && pos < 64 && this.isLegalMove(board, pos) < 2)
 				moves.add(pos);
 		}
+
+		//------------------------------------------------------------
+
 		return this.toArray(moves);
 	}
 }

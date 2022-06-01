@@ -10,10 +10,20 @@ class King extends GamePiece{
 		ArrayList<Integer> moves = new ArrayList<Integer>();
 		int X = this.getX();
 		int Y = this.getY();
+		int pos;
+		int[][] possibleMoves = {{X-1, Y-1}, {X, Y-1}, {X+1, Y-1},
+                                {X-1, Y}, {X+1, Y},
+                                {X-1, Y+1}, {X, Y+1}, {X+1, Y+1}};		
 		
-		//Upper Left
-		if(X-1 >= 0 && Y-1 >=0 && board.get(this.getPos()).isWhite() != this.isWhite()) moves.add(8*(X-1)-(Y-1));
-		
-		return null;
+		for(int[] move: possibleMoves)
+        {
+            pos = 8*move[0]+move[1];
+            if(0 <= pos && pos < 64 && this.isLegalMove(board, pos) < 2)
+                moves.add(pos);
+        }
+        
+        //------------------------------------------------------------
+        
+        return this.toArray(moves);
 	}
 }
