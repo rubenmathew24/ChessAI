@@ -2,7 +2,8 @@ import java.util.HashMap;
 import java.util.ArrayList;
 class Rook extends GamePiece{
 	public Rook(int pos_, boolean hasMoved_, boolean pieceColor_){
-			super(pos_, hasMoved_, pieceColor_);
+		super(pos_, hasMoved_, pieceColor_);
+		this.img = (this.pieceColor) ? "WhiteRook.png" : "BlackRook.png";
 	}
 	public int[] possibleMoves(HashMap<Integer,GamePiece> board){
 		ArrayList<Integer> moves = new ArrayList<Integer>();

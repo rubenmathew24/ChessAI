@@ -2,8 +2,9 @@ import java.util.HashMap;
 import java.util.ArrayList;
 class Queen extends GamePiece{
 	public Queen(int pos_, boolean hasMoved_, boolean pieceColor_){
-			super(pos_, hasMoved_, pieceColor_);
-		}	
+		super(pos_, hasMoved_, pieceColor_);
+		this.img = (this.pieceColor) ? "WhiteQueen.png" : "BlackQueen.png";
+	}	
 		
 	public int[] possibleMoves(HashMap<Integer,GamePiece> board){
 		ArrayList<Integer> moves = new ArrayList<Integer>();

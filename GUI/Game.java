@@ -17,11 +17,11 @@ class Game{
 		GamePiece newPiece = gameBoard.getPiece(toPos(newXY));
 		
 		//Clicked Own Piece
-        if(newPiece != null && newPiece.isWhite() == GameBoard.turn) return newXY;
+        if(newPiece != null && newPiece.isWhite() == gameBoard.turn()) return newXY;
 		//Clicked Enemy Piece with nothing selected
-		if(newPiece != null && selected == null) return {-1,-1};
+		if(newPiece != null && selected == null) return new int[]{-1,-1};
 		//Clicked Empty Square with nothing selected
-		if(newPiece == null && selected == null) return {-1,-1};
+		if(newPiece == null && selected == null) return new int[]{-1,-1};
 		//Clicked Occupied or Empty Square with selected Piece
 		
 		return newXY;
@@ -71,7 +71,7 @@ class Game{
 
 		
 		return selected;*/
-		return null;
+		//return null;
 	}
 
 	//Helper Methods

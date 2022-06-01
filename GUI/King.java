@@ -2,7 +2,8 @@ import java.util.HashMap;
 import java.util.ArrayList;
 class King extends GamePiece{
 	public King(int pos_, boolean hasMoved_, boolean pieceColor_){
-			super(pos_, hasMoved_, pieceColor_);
+		super(pos_, hasMoved_, pieceColor_);
+		this.img = (this.pieceColor) ? "WhiteKing.png" : "BlackKing.png";
 	}	
 	
 	

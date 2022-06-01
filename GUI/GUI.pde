@@ -249,12 +249,13 @@ void restartButton(){
 
 void grid() {
   //Variables
-  /*int end = boardOrigin + (8*boxSize);
+  int end = boardOrigin + (8*boxSize);
   int txtSize = boxSize/6;
   char[] fileValues = {'a','b','c','d','e','f','g','h'}; //rows
   char[] rankValues = {'8','7','6','5','4','3','2','1'}; //columns
   int[] lightColor = {1,238,238,213}; // {boolean, R, G, B}
   int[] darkColor = {0,125,148,93}; // {boolean, R, G, B}
+  int[] checkColor = {102, 5, 5}; // {R, G, B}
   int[] squareColor = darkColor;
   
   //Setup
@@ -266,17 +267,8 @@ void grid() {
   for(int r = boardOrigin; r < end; r += boxSize) {
     for(int c = boardOrigin; c < end; c += boxSize) {
       squareColor = (squareColor[0] == 0) ? lightColor : darkColor; //toggles dark and light color squares
-      
-      GamePiece temp = g.GameBoard.getPiece((c-boardOrigin)/boxSize, (r-boardOrigin)/boxSize); //temp GamePiece to check if King in check
-      if(temp != null && temp instanceof King){
-        King red = (King) temp;
-        if(red.inCheck) fill(102, 5, 5);
-        else fill(squareColor[1],squareColor[2],squareColor[3]);
-      }
-      else fill(squareColor[1],squareColor[2],squareColor[3]);
-      
+      fill(squareColor[1],squareColor[2],squareColor[3]);
       rect(c, r, boxSize, boxSize); //Creates square
-    
     }
     squareColor = (squareColor[0] == 0) ? lightColor : darkColor;
   }
@@ -286,7 +278,7 @@ void grid() {
   //Rank labels
   for(int rank = boardOrigin; rank < end; rank += boxSize){
     int index = ((rank-boardOrigin)/boxSize);
-    text(rankValues[index], boardOrigin+(txtSize/10), rank+txtSize+(txtSize/10));
+    text(rankValues[index], boardOrigin+(txtSize/4), rank+txtSize+(txtSize/10));
   }
   
   //File labels
@@ -304,7 +296,7 @@ void grid() {
         text(fileValues[index], file-(txtSize)+(txtSize/3), end-(txtSize/5));
     }
     
-  }*/
+  }
 }
 
 void gameOver(boolean checkmate){

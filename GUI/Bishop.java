@@ -1,8 +1,11 @@
 import java.util.HashMap;
 import java.util.ArrayList;
 class Bishop extends GamePiece{
+    
+    
 	public Bishop(int pos_, boolean hasMoved_, boolean pieceColor_){
 		super(pos_, hasMoved_, pieceColor_);
+		this.img = (this.pieceColor) ? "WhiteBishop.png" : "BlackBishop.png";
 	}	
 	
 	public int[] possibleMoves(HashMap<Integer,GamePiece> board){

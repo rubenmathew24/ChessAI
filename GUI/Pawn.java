@@ -3,6 +3,7 @@ import java.util.ArrayList;
 class Pawn extends GamePiece{
 	public Pawn(int pos_, boolean hasMoved_, boolean pieceColor_){
 		super(pos_, hasMoved_, pieceColor_);
+		this.img = (this.pieceColor) ? "WhitePawn.png" : "BlackPawn.png";
 	}	
 	
 	public int[] possibleMoves(HashMap<Integer,GamePiece> board){

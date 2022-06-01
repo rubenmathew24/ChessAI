@@ -5,11 +5,13 @@ abstract class GamePiece
 	protected int pos;
 	protected boolean pieceColor;
 	protected boolean hasMoved;
+	protected String img;
 	public GamePiece(int pos_, boolean hasMoved_, boolean pieceColor_)
 	{
 		pos = pos_;
 		hasMoved = hasMoved_;
 		pieceColor = pieceColor_;
+		img = "";
 	}
 	public boolean hasMoved()
 	{
