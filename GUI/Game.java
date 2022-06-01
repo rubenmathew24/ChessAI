@@ -16,15 +16,20 @@ class Game{
 		GamePiece selected = gameBoard.getPiece(toPos(oldXY));
 		GamePiece newPiece = gameBoard.getPiece(toPos(newXY));
 		
+		//Clicked Already selected piece (Also handles clicking empty square w/ nothing selected)
+		if(newPiece == selected) return new int[]{-1,-1};
 		//Clicked Own Piece
         if(newPiece != null && newPiece.isWhite() == gameBoard.turn()) return newXY;
 		//Clicked Enemy Piece with nothing selected
 		if(newPiece != null && selected == null) return new int[]{-1,-1};
-		//Clicked Empty Square with nothing selected
-		if(newPiece == null && selected == null) return new int[]{-1,-1};
 		//Clicked Occupied or Empty Square with selected Piece
+		if(selected != null && gameBoard.possibleMoves.get(selected).contains(toPos(newXY))) {
+    		//Moves
+    		System.out.println("Legal Move");
+    		return new int[]{-1,-1};
+    	}
 		
-		return newXY;
+		return oldXY;
 		
 		
 
