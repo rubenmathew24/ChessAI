@@ -75,11 +75,11 @@ class Game{
 	}
 
 	//Helper Methods
-	private int toPos(int[] xy){
+	public static int toPos(int[] xy){
     	return 8*xy[0]+xy[1];
 	}
 
-	private int[] toXY(int pos){
+	public static int[] toXY(int pos){
 		return new int[]{pos/8, pos%8};
 	}
 }

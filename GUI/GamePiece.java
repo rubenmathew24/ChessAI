@@ -29,6 +29,10 @@ abstract class GamePiece
 	{
 		return pos%8;
 	}
+	public String getImg()
+	{
+    	return img;
+	}
 	public boolean isWhite()
 	{
 		return pieceColor;
