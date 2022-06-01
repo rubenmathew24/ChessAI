@@ -78,14 +78,9 @@ class Board
 	
 	public void updatePossibleMoves()
 	{
-		Set<Integer> keys = board.keySet();
-		GamePiece p;
-		for(int pos: keys)
-		{
-			p = board.get(pos);
+		for(GamePiece p: board.values())
 			if(p.isWhite() == turn)
 				possibleMoves.put(p, p.possibleMoves(board));
-		}
 	}
 	
 	//Accessor Methods
