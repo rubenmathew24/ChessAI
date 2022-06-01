@@ -30,5 +30,19 @@ class Pawn extends GamePiece{
 		legality = this.isLegalMove(board, pos);
 		if(this.isLegalMove(board, pos) == 1)
 			moves.add(pos);
+		
+		// EN FUCKING PASSANT
+		GamePiece p = board.get(-1);
+		// There is a pawn to en passanted
+		if(p != null && p.isWhite() != this.isWhite())
+			// p is to the left
+			if(this.getPos()-p.getPos() == 8)
+				moves.add(8*(X-1)+Y+dir);
+			// p is to the right
+			else if(this.getPos()-p.getPos() == -8)
+				moves.add(8*(X-1)+Y+dir);
+		
+		
+		return this.toArray(moves);
 	}
 }
