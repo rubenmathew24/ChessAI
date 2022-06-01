@@ -9,6 +9,26 @@ class Pawn extends GamePiece{
 		ArrayList<Integer> moves = new ArrayList<Integer>();
 		int X = this.getX();
 		int Y = this.getY();
-		return null;
+		int dir = (this.isWhite()? -1: 1);
+		int pos = 8*X+Y+dir;
+		int legality = this.isLegalMove(board, pos);
+		// Moving forward 1
+		if(legality == 0)
+		{
+			moves.add(pos);
+			// Moving forward 2
+			if(!this.hasMoved() && this.isLegalMove(board, pos+dir) == 0)
+				moves.add(pos+dir);
+		}
+		
+		// Capturing Diagonally
+		pos = 8*(X+1)+Y+dir;
+		legality = this.isLegalMove(board, pos);
+		if(this.isLegalMove(board, pos) == 1)
+			moves.add(pos);
+		pos = 8*(X-1)+Y+dir;
+		legality = this.isLegalMove(board, pos);
+		if(this.isLegalMove(board, pos) == 1)
+			moves.add(pos);
 	}
 }
