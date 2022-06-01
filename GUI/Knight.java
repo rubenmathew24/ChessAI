@@ -1,8 +1,9 @@
-class King extends GamePiece{
-  public King(int pos_, boolean hasMoved_, boolean pieceColor_){
+import java.util.HashMap;
+import java.util.ArrayList;
+class Knight extends GamePiece{
+  public Knight(int pos_, boolean hasMoved_, boolean pieceColor_){
       super(pos_, hasMoved_, pieceColor_);
-  }  
-  
+  }
   
   public int[] possibleMoves(HashMap<Integer,GamePiece> board){
     ArrayList<Integer> moves = new ArrayList<Integer>();
@@ -13,5 +14,4 @@ class King extends GamePiece{
     
     return null;
   }
-  
 }

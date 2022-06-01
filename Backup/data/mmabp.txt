@@ -1,0 +1,28 @@
+  //Find the Best move from the list using alpha beta pruning
+  private Node findBestMove(Node n, int depth, int alpha, int beta, boolean maximizingPlayer){
+    if(depth == 0) return n;
+    
+    if(maximizingPlayer){
+      Node maxEval = null;
+      for(int i = 0; i < n.howManyChildren(); i++){
+        Node eval = findBestMove(n.getChildAt(i), depth-1, alpha, beta, false);
+        maxEval = (i == 0) ? eval : (max(maxEval.getScore(), eval.getScore()) == eval.getScore()) ? eval : maxEval;
+        alpha = max(alpha, eval.getScore());
+        if(beta <= alpha) break;
+        return maxEval;
+      }
+    }
+    
+    else{
+      Node minEval = null;
+      for(int i = 0; i < n.howManyChildren(); i++){
+        Node eval = findBestMove(n.getChildAt(i), depth-1, alpha, beta, true);
+        minEval = (i == 0) ? eval : (min(minEval.getScore(), eval.getScore()) == eval.getScore()) ? eval : minEval;
+        beta = min(beta, eval.getScore());
+        if(beta <= alpha) break;
+        return minEval;
+      }
+    }
+    
+    return null;
+  }

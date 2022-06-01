@@ -75,7 +75,7 @@ void mouseClicked(){
   
   //Check if its on the reset button
   else if(mouseX >= boardOrigin + (8.5 * boxSize) && mouseX < boardOrigin + (10.8 * boxSize) && mouseY >= boardOrigin + (7.5 * boxSize) && mouseY < boardOrigin + (8 * boxSize)){
-    //g.reset();
+    g.reset();
     
     //Resets booleans
     promoting = false;
@@ -93,7 +93,7 @@ void mouseClicked(){
   //Allow Export of game
   if(mouseX >= boardOrigin + (9.8 * boxSize) && mouseX < boardOrigin + (10.8 * boxSize) && mouseY >= boardOrigin + (6.8 * boxSize) && mouseY < boardOrigin + (7.3 * boxSize)){
     PrintWriter export = createWriter("ExportedGame.txt");
-    //export.println(g.getBoardState());
+    export.println(g.getBoardState());
     export.flush();
     export.close();
     
@@ -119,7 +119,7 @@ void mouseClicked(){
 }
 
 void handlePromote(int toPromote){
-  /*boolean success = g.promote(toPromote);
+  boolean success = g.promote(toPromote);
   if(success) {
     
     //Handles Promotion menu
@@ -134,7 +134,6 @@ void handlePromote(int toPromote){
     }
   }
   else error();
-  */
 }
 
 void importButton(){
@@ -194,7 +193,7 @@ void importGame(File game) {
     fill(0);
     rect(boardOrigin + (8.1*boxSize), boardOrigin, 8*boxSize, 6*boxSize);
     
-    //g.importBoardState(game.getAbsolutePath());
+    g.importBoardState(game.getAbsolutePath());
     System.out.println("\nImport Successful");
   }
 }
@@ -249,7 +248,7 @@ void restartButton(){
 
 void grid() {
   //Variables
-  /*int end = boardOrigin + (8*boxSize);
+  int end = boardOrigin + (8*boxSize);
   int txtSize = boxSize/6;
   char[] fileValues = {'a','b','c','d','e','f','g','h'}; //rows
   char[] rankValues = {'8','7','6','5','4','3','2','1'}; //columns
@@ -304,11 +303,11 @@ void grid() {
         text(fileValues[index], file-(txtSize)+(txtSize/3), end-(txtSize/5));
     }
     
-  }*/
+  }
 }
 
 void gameOver(boolean checkmate){
-  /*//Variables
+  //Variables
   gameFinished = true;
   int[] stalemateColor = {191,170,61}; // (R, G, B)
   int[] checkmateColor = {102, 5, 5}; // (R, G, B)
@@ -333,12 +332,12 @@ void gameOver(boolean checkmate){
     String winner = (!g.GameBoard.getTurn()) ? "White" : "Black";
     text(winner+ " Wins", buttonOrigin + (0.3 * boxSize), boardOrigin + (1.0 * boxSize));
   } else text("Draw", buttonOrigin + (0.4 * boxSize), boardOrigin + (1.0 * boxSize));
-  */
+
 }
 
 void selectedPieceGUI(){
   //Get Selected, if nothing is selected then exit
-  /*GamePiece selected = g.GameBoard.getSelected();
+  GamePiece selected = g.GameBoard.getSelected();
   if (selected == null) return;
   
   //Get Board
@@ -375,12 +374,12 @@ void selectedPieceGUI(){
         rect(boardOrigin + (moveTo[0] * boxSize), boardOrigin + (moveTo[1] * boxSize), boxSize, boxSize);
       }
     }
-  }*/
+  }
 }
 
 void promoteMenu(boolean pieceColor){
   //Variables
-  /*int[] lightColor = {238,238,213}; // {R, G, B}
+  int[] lightColor = {238,238,213}; // {R, G, B}
   int[] darkColor = {125,148,93}; // {R, G, B}
   PImage piece = null;
   
@@ -417,11 +416,11 @@ void promoteMenu(boolean pieceColor){
   image(piece, boardOrigin + (8.1*boxSize),  boardOrigin + (3*boxSize));
   
   //Notify In promote Menu
-  promoting = true;*/
+  promoting = true;
 }
 
 void drawPieces(){
-  /*GamePiece[][] board = g.GameBoard.getPieceMatrix();
+  GamePiece[][] board = g.GameBoard.getPieceMatrix();
 
   for(GamePiece[] a : board){
     for(GamePiece p : a){
@@ -432,21 +431,20 @@ void drawPieces(){
         image(piece, boardOrigin + (p.getX() * boxSize), boardOrigin + (p.getY() * boxSize));
       }
     }
-  }*/
+  }
 }
 
 
 //Helper Methods
 public String coordsToSquare(int x, int y){
-  /*char[] fileValues = {'a','b','c','d','e','f','g','h'}; //rows
+  char[] fileValues = {'a','b','c','d','e','f','g','h'}; //rows
   char[] rankValues = {'8','7','6','5','4','3','2','1'}; //columns
   
-  return "" + fileValues[x] + rankValues[y];*/
-  return null;
+  return "" + fileValues[x] + rankValues[y];
 }
 
 public int[] squareToCoords(String square){
-  /*int[] coords = null;
+  int[] coords = null;
   if(square.length() != 2) return null;
   String fileValues = "abcdefgh"; //rows
   String rankValues = "87654321"; //columns
@@ -454,14 +452,13 @@ public int[] squareToCoords(String square){
   coords = new int[]{fileValues.indexOf(square.charAt(0)), rankValues.indexOf(square.charAt(1))};
   
   if(coords[0] == -1 || coords[1] == -1) return null;
-  else return coords;*/
-  return null;
+  else return coords;
 }
 
 //Debug Method
 public void printCompressed(){
-  /*byte[] B = g.GameBoard.compressBoardState();
+  byte[] B = g.GameBoard.compressBoardState();
   for(byte b : B){
     System.out.println(b);
-  }*/
+  }
 }
