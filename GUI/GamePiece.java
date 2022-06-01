@@ -6,9 +6,9 @@ abstract class GamePiece
 	protected boolean hasMoved;
 	public GamePiece(int pos_, boolean hasMoved_, boolean pieceColor_)
 	{
-	  pos = pos_;
-	  hasMoved = hasMoved_;
-	  pieceColor = pieceColor_;
+		pos = pos_;
+		hasMoved = hasMoved_;
+		pieceColor = pieceColor_;
 	}
 	public boolean hasMoved()
 	{

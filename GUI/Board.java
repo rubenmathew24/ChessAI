@@ -7,15 +7,15 @@ class Board
 	private HashMap<Integer,GamePiece> board;
 	public Board()
 	{
-		//                      White Pawn 0      White Pawn 1      White Pawn 2      White Pawn 3      White Pawn 4      White Pawn 5      White Pawn 6      White Pawn 7
+		//											White Pawn 0			White Pawn 1			White Pawn 2			White Pawn 3			White Pawn 4			White Pawn 5			White Pawn 6			White Pawn 7
 		compressed = new byte[]{(byte)0b00011001, (byte)0b00111001, (byte)0b01011001, (byte)0b01111001, (byte)0b10011001, (byte)0b10111001, (byte)0b11011001, (byte)0b11111001,
-		//                      White King        White Rook        White Rook        White Knight      White Knight      White Bishop      White Bishop      White Queen
+		//											White King				White Rook				White Rook				White Knight			White Knight			White Bishop			White Bishop			White Queen
 								(byte)0b10011101, (byte)0b00011101, (byte)0b11111101, (byte)0b00111101, (byte)0b11011101, (byte)0b01011101, (byte)0b10111101, (byte)0b01111101,
-		//                      Black Pawn 0      Black Pawn 1      Black Pawn 2      Black Pawn 3      Black Pawn 4      Black Pawn 5      Black Pawn 6      Black Pawn 7
+		//											Black Pawn 0			Black Pawn 1			Black Pawn 2			Black Pawn 3			Black Pawn 4			Black Pawn 5			Black Pawn 6			Black Pawn 7
 								(byte)0b00000101, (byte)0b00100101, (byte)0b01000101, (byte)0b01100101, (byte)0b10000101, (byte)0b10100101, (byte)0b11000101, (byte)0b11100101,
-		//                      Black King        Black Rook        Black Rook        Black Knight      Black Knight      Black Bishop      Black Bishop      Black Queen
+		//											Black King				Black Rook				Black Rook				Black Knight			Black Knight			Black Bishop			Black Bishop			Black Queen
 								(byte)0b10000001, (byte)0b00000001, (byte)0b11100001, (byte)0b00100001, (byte)0b11000001, (byte)0b01000001, (byte)0b10100001, (byte)0b01100001,
-		//                      White Promoted    Black Promoted    White Promo Type  White Promo Type  Black Promo Type  Black Promo Type  Control
+		//											White Promoted		Black Promoted		White Promo Type	White Promo Type	Black Promo Type	Black Promo Type	Control
 								(byte)0b00000000, (byte)0b00000000, (byte)0b00000000, (byte)0b00000000, (byte)0b00000000, (byte)0b00000000, (byte)0b00000000};
 		turn = true;
 		gameOver = false;
@@ -37,7 +37,7 @@ class Board
 		boolean hasMoved, color;
 		Class[] promotedTypes = {Queen.class, Knight.class, Rook.class, Bishop.class};
 		Class[] types = {Pawn.class, Pawn.class, Pawn.class, Pawn.class, Pawn.class, Pawn.class, Pawn.class, Pawn.class,
-                King.class, Rook.class, Rook.class, Knight.class, Knight.class, Bishop.class, Bishop.class, Queen.class};
+				King.class, Rook.class, Rook.class, Knight.class, Knight.class, Bishop.class, Bishop.class, Queen.class};
 		Class[] params = {int.class, boolean.class, boolean.class};
 		for(int i=0; i<32; i++)
 		{
@@ -93,7 +93,7 @@ class Board
 		return gameOver();
 	}
 
-  public String toString(){
-    return "Hello! Nothing has caught fire";
-  }
+	public String toString(){
+		return "Hello! Nothing has caught fire";
+	}
 }
