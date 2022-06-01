@@ -22,6 +22,22 @@ class King extends GamePiece{
                 moves.add(pos);
         }
         
+        // Castling
+        if(!this.hasMoved)
+        {
+            GamePiece temp;
+            
+        	//King Side
+        	pos = 8*(X+3)+Y;
+        	temp = board.get(pos);
+        	if(temp != null && !temp.hasMoved() && temp instanceof Rook) moves.add(8*(X+2)+Y);
+        
+        	//Queen Side
+        	pos = 8*(X-4)+Y;
+            temp = board.get(pos);
+            if(temp != null && !temp.hasMoved() && temp instanceof Rook) moves.add(8*(X-2)+Y);
+        }
+        
         //------------------------------------------------------------
         
         return this.toArray(moves);
