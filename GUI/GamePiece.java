@@ -30,5 +30,14 @@ abstract class GamePiece
 	{
 		return pieceColor;
 	}
-	//abstract public int[] possibleMoves(HashMap<Integer, GamePiece> board);
+	abstract public int[] possibleMoves(HashMap<Integer, GamePiece> board);
+	public int isLegalMove(HashMap<Integer, GamePiece> board, int pos)
+	{
+		GamePiece p = board.get(pos);
+		if(p == null)
+			return 0; // Empty
+		if(p.isWhite() != this.isWhite())
+			return 1; // Take
+		return 2; // Blocked	
+	}
 }
