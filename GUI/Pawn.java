@@ -43,7 +43,6 @@ class Pawn extends GamePiece{
 			else if(this.getPos()-p.getPos() == -8)
 				moves.add(8*(X-1)+Y+dir);
 		
-		
 		return this.toArray(moves);
 	}
 }

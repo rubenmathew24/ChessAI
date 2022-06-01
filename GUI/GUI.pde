@@ -335,6 +335,8 @@ void selectedPieceGUI(){
 	int selectedPos = Game.toPos(selected); 
 	
 	GamePiece selectedPiece = g.gameBoard.getPiece(selectedPos);
+	System.out.println(g.gameBoard.possibleMoves.containsKey(selectedPiece));
+	System.out.println(selectedPiece.getPos());
 	
 	//Yellow Higlight of Chosen Piece
     fill(200,200,50);
@@ -343,9 +345,27 @@ void selectedPieceGUI(){
     //Puts Indicator for legal moves of piece
     stroke(100);
     
-    for(int pos : g.gameBoard.possibleMoves.get(selectedPiece)){
+    int[] temp = g.gameBoard.possibleMoves.get(selectedPiece);
+	System.out.println(temp.length);
+    
+    for(int pos : temp){
         //if potential move would not put king in check
         
+        
+        
+        int[] moveTo = Game.toXY(pos);
+        
+        //Legal Capture
+        if(g.gameBoard.board.get(pos) != null){
+        	fill(184, 117, 112);
+			rect(boardOrigin + (moveTo[0] * boxSize), boardOrigin + (moveTo[1] * boxSize), boxSize, boxSize);
+        } 
+        
+        //Legal Move
+        else {       
+            fill(180,180,180);
+            circle(boardOrigin + moveTo[0]*boxSize + boxSize/2, boardOrigin + moveTo[1]*boxSize + boxSize/2, boxSize/10);
+        }
         
     }
 
