@@ -35,7 +35,7 @@ abstract class GamePiece
 	public int isLegalMove(HashMap<Integer, GamePiece> board, int pos)
 	{
 		if(0<pos || pos >= 64)
-			return 3;
+			return 3; // Out of Bounds
 		GamePiece p = board.get(pos);
 		if(p == null)
 			return 0; // Empty

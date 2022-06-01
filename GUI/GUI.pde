@@ -70,7 +70,7 @@ void mouseClicked(){
 
   //If Clicking on the board
   if(!promoting && !gameFinished && (x >= 0 && x < 8 && y >= 0 && y < 8)){
-    selected = g.pieceSelected(x, y, selected[0], selected[1]);
+    selected = g.pieceSelected(new int[]{x,y}, selected);
   } 
   
   //Check if its on the reset button
