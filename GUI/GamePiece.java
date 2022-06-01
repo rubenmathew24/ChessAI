@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 abstract class GamePiece
 {
@@ -39,5 +40,11 @@ abstract class GamePiece
 		if(p.isWhite() != this.isWhite())
 			return 1; // Take
 		return 2; // Blocked	
+	}
+	public int[] toArray(ArrayList<Integer> moves)
+	{
+		int[] temp = new int[moves.size()];
+		for(int i = 0; i < moves.size(); i++) temp[i] = moves.get(i);
+		return temp;
 	}
 }

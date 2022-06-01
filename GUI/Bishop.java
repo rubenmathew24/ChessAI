@@ -9,51 +9,50 @@ class Bishop extends GamePiece{
 		ArrayList<Integer> moves = new ArrayList<Integer>();
 		int X = this.getX();
 		int Y = this.getY();
-	
+		int legality, pos;
+
 		//Upper Left
 		for(int i = X-1,j = Y-1; i>=0 && j>=0; i--,j--){
-			int pos = 8*i+j;
-			if(board.get(pos) != null){
-				if(board.get(pos).isWhite() != this.isWhite()) moves.add(pos);
+			pos = 8*i+Y;
+			legality = this.isLegalMove(board, pos);
+			if(legality < 2)
+				moves.add(pos);
+			if(legality > 0)
 				break;
-			}
-			moves.add(pos);
 		}
 		
 		//Upper Right
 		for(int i = X+1,j = Y-1; i<8 && j>=0; i++,j--){
-			int pos = 8*i+j;
-			if(board.get(pos) != null){
-				if(board.get(pos).isWhite() != this.isWhite()) moves.add(pos);
+			pos = 8*i+Y;
+			legality = this.isLegalMove(board, pos);
+			if(legality < 2)
+				moves.add(pos);
+			if(legality > 0)
 				break;
-			}
-			moves.add(pos);
 		}
 		
 		//Lower Left
 		for(int i = X-1,j = Y+1; i>=0 && j<8; i--,j++){
-			int pos = 8*i+j;
-			if(board.get(pos) != null){
-				if(board.get(pos).isWhite() != this.isWhite()) moves.add(pos);
+			pos = 8*i+Y;
+			legality = this.isLegalMove(board, pos);
+			if(legality < 2)
+				moves.add(pos);
+			if(legality > 0)
 				break;
-			}
-			moves.add(pos);
 		}
 		
 		//Lower Right
 		for(int i = X+1,j = Y+1; i<8 && j<8; i++,j++){
-			int pos = 8*i+j;
-			if(board.get(pos) != null){
-				if(board.get(pos).isWhite() != this.isWhite()) moves.add(pos);
+			pos = 8*i+Y;
+			legality = this.isLegalMove(board, pos);
+			if(legality < 2)
+				moves.add(pos);
+			if(legality > 0)
 				break;
-			}
-			moves.add(pos);
 		}
 		
 		//------------------------------------------------------------
 	
-		int[] temp = new int[moves.size()];
-		for(int i = 0; i < moves.size(); i++) temp[i] = moves.get(i);
-		return temp;
+		return this.toArray(moves);
 	}
 }
