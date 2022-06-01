@@ -1,10 +1,12 @@
 import java.util.HashMap;
+import java.util.Set;
 class Board
 {
 	private boolean turn;
 	private boolean gameOver;
 	private byte[] compressed;
 	private HashMap<Integer,GamePiece> board;
+	private HashMap<GamePiece, int[]> possibleMoves;
 	public Board()
 	{
 		//                      White Pawn 0      White Pawn 1      White Pawn 2      White Pawn 3      White Pawn 4      White Pawn 5      White Pawn 6      White Pawn 7
@@ -20,6 +22,7 @@ class Board
 		turn = true;
 		gameOver = false;
 		uncompressBoard();
+		updatePossibleMoves();
 	}
 	public Board(byte[] _compressed)
 	{
@@ -27,6 +30,7 @@ class Board
 		turn = (compressed[38] & 0b00000001) == 1;
 		gameOver = (compressed[38] & 0b00000010)>>1 == 1;
 		uncompressBoard();
+		updatePossibleMoves();
 	}
 	private void uncompressBoard()
 	{
@@ -72,6 +76,18 @@ class Board
 			board.remove(-1);
 	}
 	
+	public void updatePossibleMoves()
+	{
+		Set<Integer> keys = board.keySet();
+		GamePiece p;
+		for(int pos: keys)
+		{
+			p = board.get(pos);
+			if(p.isWhite() == turn)
+				possibleMoves.put(p, p.possibleMoves(board));
+		}
+	}
+	
 	//Accessor Methods
 	public GamePiece getPiece(int pos)
 	{
@@ -90,7 +106,7 @@ class Board
 	
 	public boolean gameOver()
 	{
-		return gameOver();
+		return gameOver;
 	}
 
 	public String toString(){
