@@ -9,9 +9,17 @@ class Knight extends GamePiece{
 		ArrayList<Integer> moves = new ArrayList<Integer>();
 		int X = this.getX();
 		int Y = this.getY();
-		
-		
-		
-		return null;
+		int pos;
+		int[][] possibleMoves = {{X+1, Y+2}, {X+1, Y-2},
+								{X-1, Y+2}, {X-1, Y-2},
+								{X+2, Y+1}, {X+2, Y-1},
+								{X-2, Y+1}, {X+2, Y-1}};
+		for(int[] move: possibleMoves)
+		{
+			pos = 8*move[0]+move[1];
+			if(0 <= pos && pos < 64 && this.isLegalMove(board, pos) < 2)
+				moves.add(pos);
+		}
+		return this.toArray(moves);
 	}
 }
