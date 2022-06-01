@@ -26,16 +26,24 @@ class King extends GamePiece{
         if(!this.hasMoved)
         {
             GamePiece temp;
+            boolean blocked = false;
             
         	//King Side
-        	pos = 8*(X+3)+Y;
-        	temp = board.get(pos);
-        	if(temp != null && !temp.hasMoved() && temp instanceof Rook) moves.add(8*(X+2)+Y);
+        	for(int i = 1; i < 3; i++) if(board.get(8*(X+i)+Y) != null) blocked = true;
+        	if(!blocked){
+            	pos = 8*(X+3)+Y;
+            	temp = board.get(pos);
+            	if(temp != null && !temp.hasMoved() && temp instanceof Rook) moves.add(8*(X+2)+Y);
+        	}
+        	blocked = false;
         
         	//Queen Side
-        	pos = 8*(X-4)+Y;
-            temp = board.get(pos);
-            if(temp != null && !temp.hasMoved() && temp instanceof Rook) moves.add(8*(X-2)+Y);
+        	for(int i = 1; i < 4; i++) if(board.get(8*(X-i)+Y) != null) blocked = true;
+        	if(!blocked){	
+            	pos = 8*(X-4)+Y;
+                temp = board.get(pos);
+                if(temp != null && !temp.hasMoved() && temp instanceof Rook) moves.add(8*(X-2)+Y);
+        	}
         }
         
         //------------------------------------------------------------
