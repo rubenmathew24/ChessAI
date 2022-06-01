@@ -40,9 +40,9 @@ abstract class GamePiece
 	abstract public int[] possibleMoves(HashMap<Integer, GamePiece> board);
 	public int isLegalMove(HashMap<Integer, GamePiece> board, int pos)
 	{
-		if(0<pos || pos >= 64)
+		if(0 > pos || pos > 63)
 			return 3; // Out of Bounds
-		GamePiece p = board.get(pos);
+		GamePiece p = board.getOrDefault(pos,null);
 		if(p == null)
 			return 0; // Empty
 		if(p.isWhite() != this.isWhite())

@@ -454,9 +454,11 @@ void promoteMenu(boolean pieceColor){
 
 void drawPieces(){	
 	for(GamePiece p : g.gameBoard.board.values()){
-    	PImage piece = loadImage(p.getImg());
-        piece.resize(boxSize, boxSize);
-        image(piece, boardOrigin + (p.getX() * boxSize), boardOrigin + (p.getY() * boxSize));
+    	if(p != null){
+        	PImage piece = loadImage(p.getImg());
+            piece.resize(boxSize, boxSize);
+            image(piece, boardOrigin + (p.getX() * boxSize), boardOrigin + (p.getY() * boxSize));
+        }
 	}	
     
 	/*GamePiece[][] board = g.GameBoard.getPieceMatrix();

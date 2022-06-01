@@ -18,8 +18,9 @@ class Knight extends GamePiece{
 		for(int[] move: possibleMoves)
 		{
 			pos = 8*move[0]+move[1];
-			if(this.isLegalMove(board, pos) < 2)
+			if(move[0] < 8 && move[0] >=0 && move[1] < 8 && move[1] >=0 && this.isLegalMove(board, pos) < 2)
 				moves.add(pos);
+			System.out.println("(" + X + ", " + Y + ") " + pos + ", " + this.isLegalMove(board, pos));
 		}
 
 		//------------------------------------------------------------
