@@ -7,7 +7,7 @@ class King extends GamePiece{
 	}	
 	
 	
-	public int[] possibleMoves(HashMap<Integer,GamePiece> board){
+	public ArrayList<Integer> possibleMoves(HashMap<Integer,GamePiece> board){
 		ArrayList<Integer> moves = new ArrayList<Integer>();
 		int X = this.getX();
 		int Y = this.getY();
@@ -51,6 +51,6 @@ class King extends GamePiece{
         
         //------------------------------------------------------------
         
-        return this.toArray(moves);
+        return moves;
 	}
 }

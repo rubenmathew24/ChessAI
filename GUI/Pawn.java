@@ -6,7 +6,7 @@ class Pawn extends GamePiece{
 		this.img = (this.pieceColor) ? "WhitePawn.png" : "BlackPawn.png";
 	}	
 	
-	public int[] possibleMoves(HashMap<Integer,GamePiece> board){
+	public ArrayList<Integer> possibleMoves(HashMap<Integer,GamePiece> board){
 		ArrayList<Integer> moves = new ArrayList<Integer>();
 		int X = this.getX();
 		int Y = this.getY();
@@ -43,6 +43,6 @@ class Pawn extends GamePiece{
 			else if(this.getPos()-p.getPos() == -8)
 				moves.add(8*(X-1)+Y+dir);
 		
-		return this.toArray(moves);
+		return moves;
 	}
 }

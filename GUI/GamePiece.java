@@ -37,7 +37,7 @@ abstract class GamePiece
 	{
 		return pieceColor;
 	}
-	abstract public int[] possibleMoves(HashMap<Integer, GamePiece> board);
+	abstract public ArrayList<Integer> possibleMoves(HashMap<Integer, GamePiece> board);
 	public int isLegalMove(HashMap<Integer, GamePiece> board, int pos)
 	{
 		if(0 > pos || pos > 63)

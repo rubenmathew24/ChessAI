@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 class Board
@@ -6,7 +7,7 @@ class Board
 	private boolean gameOver;
 	private byte[] compressed;
 	public HashMap<Integer,GamePiece> board;
-	public HashMap<GamePiece, int[]> possibleMoves;
+	public HashMap<GamePiece, ArrayList<Integer>> possibleMoves;
 	public Board()
 	{
 		//                      White Pawn 0      White Pawn 1      White Pawn 2      White Pawn 3      White Pawn 4      White Pawn 5      White Pawn 6      White Pawn 7
@@ -21,7 +22,7 @@ class Board
 								(byte)0b00000000, (byte)0b00000000, (byte)0b00000000, (byte)0b00000000, (byte)0b00000000, (byte)0b00000000, (byte)0b00000000};
 		turn = true;
 		gameOver = false;
-		possibleMoves = new HashMap<GamePiece, int[]>();
+		possibleMoves = new HashMap<GamePiece, ArrayList<Integer>>();
 		uncompressBoard();
 		updatePossibleMoves();
 	}
@@ -30,7 +31,7 @@ class Board
 		compressed = _compressed;
 		turn = (compressed[38] & 0b00000001) == 1;
 		gameOver = (compressed[38] & 0b00000010)>>1 == 1;
-		possibleMoves = new HashMap<GamePiece, int[]>();
+		possibleMoves = new HashMap<GamePiece, ArrayList<Integer>>();
 		uncompressBoard();
 		updatePossibleMoves();
 	}

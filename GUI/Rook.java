@@ -5,7 +5,7 @@ class Rook extends GamePiece{
 		super(pos_, hasMoved_, pieceColor_);
 		this.img = (this.pieceColor) ? "WhiteRook.png" : "BlackRook.png";
 	}
-	public int[] possibleMoves(HashMap<Integer,GamePiece> board){
+	public ArrayList<Integer> possibleMoves(HashMap<Integer,GamePiece> board){
 		ArrayList<Integer> moves = new ArrayList<Integer>();
 		int X = this.getX();
 		int Y = this.getY();
@@ -55,6 +55,6 @@ class Rook extends GamePiece{
 		
 		//------------------------------------------------------------
 		
-		return this.toArray(moves);
+		return moves;
 	}
 }
