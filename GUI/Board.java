@@ -55,12 +55,10 @@ class Board
 			board.put(pos, null);
 			if(i%16 < 8) // Piece is a pawn
 			{
-				if((compressed[(color?32:33)] & (1 << (i%8))) >> (i%8) == 1) // Pawn was promoted
+				if((compressed[(color?32:33)] & (1 << (i%8)) >> (i%8)) == 1) // Pawn was promoted
 				{
-					promotedIndex = (i%8)*2+16*(i<16? 0: 1);
-					System.out.print(compressed[(34+promotedIndex/8)]+" "+(0b11 << (promotedIndex%4)*2));
-					promotedIndex = (compressed[(34+promotedIndex/8)] & 0b11 << (promotedIndex%4)*2) >> (promotedIndex%4)*2;
-					System.out.println(promotedIndex+" "+i);
+					promotedIndex = (i%16)*2+32*(i<16? 0: 1);
+					promotedIndex = (compressed[(34+promotedIndex/8)] & 0b11 << (promotedIndex%16)) >> (promotedIndex%16);
 					try
 					{
 						board.put(pos, (GamePiece)promotedTypes[promotedIndex].getConstructor(params).newInstance(pos, hasMoved, color));
