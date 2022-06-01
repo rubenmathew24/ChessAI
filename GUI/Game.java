@@ -25,6 +25,7 @@ class Game{
 		//Clicked Occupied or Empty Square with selected Piece
 		if(selected != null && gameBoard.possibleMoves.get(selected).contains(toPos(newXY))) {
     		//Moves
+    		gameBoard.move(toPos(oldXY), toPos(newXY));
     		System.out.println("Legal Move");
     		return new int[]{-1,-1};
     	}

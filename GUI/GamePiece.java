@@ -6,12 +6,22 @@ abstract class GamePiece
 	protected boolean pieceColor;
 	protected boolean hasMoved;
 	protected String img;
-	public GamePiece(int pos_, boolean hasMoved_, boolean pieceColor_)
+	protected int compressedIndex;
+	public GamePiece(int pos_, boolean hasMoved_, boolean pieceColor_, int ind_)
 	{
 		pos = pos_;
 		hasMoved = hasMoved_;
 		pieceColor = pieceColor_;
+		compressedIndex = ind_;
 		img = "";
+	}
+	public void setPos(int pos_)
+	{
+		pos = pos_;
+	}
+	public void moved()
+	{
+		hasMoved = true;
 	}
 	public boolean hasMoved()
 	{
@@ -37,12 +47,16 @@ abstract class GamePiece
 	{
 		return pieceColor;
 	}
+	public int index()
+	{
+		return compressedIndex;
+	}
 	abstract public ArrayList<Integer> possibleMoves(HashMap<Integer, GamePiece> board);
 	public int isLegalMove(HashMap<Integer, GamePiece> board, int pos)
 	{
 		if(0 > pos || pos > 63)
 			return 3; // Out of Bounds
-		GamePiece p = board.getOrDefault(pos,null);
+		GamePiece p = board.get(pos);
 		if(p == null)
 			return 0; // Empty
 		if(p.isWhite() != this.isWhite())

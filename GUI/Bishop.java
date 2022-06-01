@@ -3,8 +3,8 @@ import java.util.ArrayList;
 class Bishop extends GamePiece{
     
     
-	public Bishop(int pos_, boolean hasMoved_, boolean pieceColor_){
-		super(pos_, hasMoved_, pieceColor_);
+	public Bishop(int pos_, boolean hasMoved_, boolean pieceColor_, int ind_){
+		super(pos_, hasMoved_, pieceColor_, ind_);
 		this.img = (this.pieceColor) ? "WhiteBishop.png" : "BlackBishop.png";
 	}	
 	
@@ -16,7 +16,7 @@ class Bishop extends GamePiece{
 
 		//Upper Left
 		for(int i = X-1,j = Y-1; i>=0 && j>=0; i--,j--){
-			pos = 8*i+Y;
+			pos = 8*i+j;
 			legality = this.isLegalMove(board, pos);
 			if(legality < 2)
 				moves.add(pos);
@@ -26,7 +26,7 @@ class Bishop extends GamePiece{
 		
 		//Upper Right
 		for(int i = X+1,j = Y-1; i<8 && j>=0; i++,j--){
-			pos = 8*i+Y;
+			pos = 8*i+j;
 			legality = this.isLegalMove(board, pos);
 			if(legality < 2)
 				moves.add(pos);
@@ -36,7 +36,7 @@ class Bishop extends GamePiece{
 		
 		//Lower Left
 		for(int i = X-1,j = Y+1; i>=0 && j<8; i--,j++){
-			pos = 8*i+Y;
+			pos = 8*i+j;
 			legality = this.isLegalMove(board, pos);
 			if(legality < 2)
 				moves.add(pos);
@@ -46,7 +46,7 @@ class Bishop extends GamePiece{
 		
 		//Lower Right
 		for(int i = X+1,j = Y+1; i<8 && j<8; i++,j++){
-			pos = 8*i+Y;
+			pos = 8*i+j;
 			legality = this.isLegalMove(board, pos);
 			if(legality < 2)
 				moves.add(pos);

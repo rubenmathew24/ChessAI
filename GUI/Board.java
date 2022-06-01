@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Set;
 class Board
 {
 	private boolean turn;
@@ -45,7 +44,7 @@ class Board
 		Class[] promotedTypes = {Queen.class, Knight.class, Rook.class, Bishop.class};
 		Class[] types = {Pawn.class, Pawn.class, Pawn.class, Pawn.class, Pawn.class, Pawn.class, Pawn.class, Pawn.class,
                 King.class, Rook.class, Rook.class, Knight.class, Knight.class, Bishop.class, Bishop.class, Queen.class};
-		Class[] params = {int.class, boolean.class, boolean.class};
+		Class[] params = {int.class, boolean.class, boolean.class, int.class};
 		for(int i=0; i<32; i++)
 		{
 			if(compressed[i]%2 == 0)
@@ -61,18 +60,18 @@ class Board
 					promotedIndex = (compressed[(34+promotedIndex/8)] & 0b11 << (promotedIndex%16)) >> (promotedIndex%16);
 					try
 					{
-						board.put(pos, (GamePiece)promotedTypes[promotedIndex].getConstructor(params).newInstance(pos, hasMoved, color));
+						board.put(pos, (GamePiece)promotedTypes[promotedIndex].getConstructor(params).newInstance(pos, hasMoved, color, i));
 					} catch(Exception e) {System.err.print(e);}
 				}
 				else
-					board.put(pos, new Pawn(pos, hasMoved, color));
+					board.put(pos, new Pawn(pos, hasMoved, color, i));
 				if(i == pawnIndex && enPassant)
 					board.put(-1, (Pawn)board.get(pos));
 			}
 			else
 				try
 				{
-					board.put(pos, (GamePiece)types[i%16].getConstructor(params).newInstance(pos, hasMoved, color));
+					board.put(pos, (GamePiece)types[i%16].getConstructor(params).newInstance(pos, hasMoved, color, i));
 				} catch(Exception e) {System.err.print(e);}
 		}
 		if(!enPassant)
@@ -86,6 +85,35 @@ class Board
 				possibleMoves.put(p, p.possibleMoves(board));
 	}
 	
+	public void move(int from, int to)
+	{
+		GamePiece f = board.get(from);
+		GamePiece t = board.get(to);
+		//Moving to empty space
+		if(t == null)
+		{
+			board.remove(from);
+			board.put(to, f);
+			compressed[f.index()] = (byte)(to<<2 + 0b11);
+			f.setPos(to);
+			f.moved();
+		}
+		//Capturing
+		else
+		{
+			board.remove(from);
+			board.put(to, f);
+			compressed[f.index()] = (byte)(to<<2 + 0b11);
+			compressed[t.index()] += 1;
+			f.setPos(to);
+			f.moved();
+		}
+		turn = !turn;
+		updatePossibleMoves();
+		//En Passant does not currently work
+		//Deal with promotion tomorrow
+		//Deal with castling tomorrow
+	}
 	//Accessor Methods
 	public GamePiece getPiece(int pos)
 	{

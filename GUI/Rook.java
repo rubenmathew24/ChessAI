@@ -1,8 +1,8 @@
 import java.util.HashMap;
 import java.util.ArrayList;
 class Rook extends GamePiece{
-	public Rook(int pos_, boolean hasMoved_, boolean pieceColor_){
-		super(pos_, hasMoved_, pieceColor_);
+	public Rook(int pos_, boolean hasMoved_, boolean pieceColor_, int ind_){
+		super(pos_, hasMoved_, pieceColor_, ind_);
 		this.img = (this.pieceColor) ? "WhiteRook.png" : "BlackRook.png";
 	}
 	public ArrayList<Integer> possibleMoves(HashMap<Integer,GamePiece> board){
@@ -33,7 +33,7 @@ class Rook extends GamePiece{
 		
 		//Down
 		for(int i = Y+1; i < 8; i++){
-			pos = 8*i+Y;
+			pos = 8*X+i;
 			legality = this.isLegalMove(board, pos);
 			if(legality < 2)
 				moves.add(pos);
@@ -44,7 +44,7 @@ class Rook extends GamePiece{
 		
 		//Up
 		for(int i = Y-1; i >= 0; i--){
-			pos = 8*i+Y;
+			pos = 8*X+i;
 			legality = this.isLegalMove(board, pos);
 			if(legality < 2)
 				moves.add(pos);

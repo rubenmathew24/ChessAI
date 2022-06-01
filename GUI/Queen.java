@@ -1,8 +1,8 @@
 import java.util.HashMap;
 import java.util.ArrayList;
 class Queen extends GamePiece{
-	public Queen(int pos_, boolean hasMoved_, boolean pieceColor_){
-		super(pos_, hasMoved_, pieceColor_);
+	public Queen(int pos_, boolean hasMoved_, boolean pieceColor_, int ind_){
+		super(pos_, hasMoved_, pieceColor_, ind_);
 		this.img = (this.pieceColor) ? "WhiteQueen.png" : "BlackQueen.png";
 	}	
 		
@@ -30,31 +30,34 @@ class Queen extends GamePiece{
 				moves.add(pos);
 			if(legality > 0)
 				break;
+			moves.add(pos);
 		}
 		
 		//Down
 		for(int i = Y+1; i < 8; i++){
-			pos = 8*i+Y;
+			pos = 8*X+i;
 			legality = this.isLegalMove(board, pos);
 			if(legality < 2)
 				moves.add(pos);
 			if(legality > 0)
 				break;
+			moves.add(pos);
 		}
 		
 		//Up
 		for(int i = Y-1; i >= 0; i--){
-			pos = 8*i+Y;
+			pos = 8*X+i;
 			legality = this.isLegalMove(board, pos);
 			if(legality < 2)
 				moves.add(pos);
 			if(legality > 0)
 				break;
+			moves.add(pos);
 		}
 	 
 		//Upper Left
 		for(int i = X-1,j = Y-1; i>=0 && j>=0; i--,j--){
-			pos = 8*i+Y;
+			pos = 8*i+j;
 			legality = this.isLegalMove(board, pos);
 			if(legality < 2)
 				moves.add(pos);
@@ -64,7 +67,7 @@ class Queen extends GamePiece{
 		
 		//Upper Right
 		for(int i = X+1,j = Y-1; i<8 && j>=0; i++,j--){
-			pos = 8*i+Y;
+			pos = 8*i+j;
 			legality = this.isLegalMove(board, pos);
 			if(legality < 2)
 				moves.add(pos);
@@ -74,7 +77,7 @@ class Queen extends GamePiece{
 		
 		//Lower Left
 		for(int i = X-1,j = Y+1; i>=0 && j<8; i--,j++){
-			pos = 8*i+Y;
+			pos = 8*i+j;
 			legality = this.isLegalMove(board, pos);
 			if(legality < 2)
 				moves.add(pos);
@@ -84,7 +87,7 @@ class Queen extends GamePiece{
 		
 		//Lower Right
 		for(int i = X+1,j = Y+1; i<8 && j<8; i++,j++){
-			pos = 8*i+Y;
+			pos = 8*i+j;
 			legality = this.isLegalMove(board, pos);
 			if(legality < 2)
 				moves.add(pos);
