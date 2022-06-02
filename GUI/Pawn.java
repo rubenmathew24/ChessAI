@@ -37,11 +37,11 @@ class Pawn extends GamePiece{
 		// There is a pawn to en passanted
 		if(p != null && p.isWhite() != this.isWhite())
 			// p is to the left
-			if(this.getPos()-p.getPos() == 8)
+			if(X-p.getX() == 1 && Y == p.getY())
 				moves.add(8*(X-1)+Y+dir);
 			// p is to the right
-			else if(this.getPos()-p.getPos() == -8)
-				moves.add(8*(X-1)+Y+dir);
+			else if(p.getX()-X == 1 && Y == p.getY())
+				moves.add(8*(X+1)+Y+dir);
 		
 		return moves;
 	}

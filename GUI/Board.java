@@ -97,6 +97,15 @@ class Board
 			compressed[f.index()] = (byte)(to<<2 + 0b11);
 			f.setPos(to);
 			f.moved();
+			// Pawn is capturing via En Passant
+			GamePiece p = board.get(-1);
+			if(p != null && to-p.getPos() == (f.isWhite()? -1: 1) && f instanceof Pawn)
+				board.remove(p.getPos());
+			// Some idiot pawn is leaving En Passant up
+			if(to - from == (f.isWhite()? -2: 2) && f instanceof Pawn)
+				board.put(-1, f);
+			else
+				board.remove(-1);
 		}
 		//Capturing
 		else
@@ -111,8 +120,8 @@ class Board
 		turn = !turn;
 		updatePossibleMoves();
 		//En Passant does not currently work
-		//Deal with promotion tomorrow
-		//Deal with castling tomorrow
+		//Deal with promotion today
+		//Deal with castling today
 	}
 	//Accessor Methods
 	public GamePiece getPiece(int pos)
