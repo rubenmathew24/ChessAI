@@ -195,7 +195,7 @@ void importGame(File game) {
 		fill(0);
 		rect(boardOrigin + (8.1*boxSize), boardOrigin, 8*boxSize, 6*boxSize);
 		
-		//g.importBoardState(game.getAbsolutePath());
+		g.importBoardState(game);
 		System.out.println("\nImport Successful");
 	}
 }

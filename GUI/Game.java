@@ -1,3 +1,6 @@
+import java.util.Scanner;
+import java.io.File;
+
 class Game{
 	Board gameBoard;
 	
@@ -85,6 +88,28 @@ class Game{
 		return selected;*/
 		//return null;
 	}
+
+	public void importBoardState(File file){
+		byte[] temp = new byte[39];
+		String line;
+		try(Scanner reader = new Scanner(file)){
+    		line = reader.nextLine();
+    		char[] c = line.toCharArray();
+    		System.out.println(c.length + " " + line); // 78
+    
+    		for(int i = 0; i < c.length; i+=2){
+        		//temp[i/2] = Byte.parseByte(""+c[i]+c[i+1], 16);
+        		temp[i/2] = (byte) ((Character.digit(c[i],16) << 4) + Character.digit(c[i+1], 16));
+        		System.out.println(i/2 +": "+c[i]+c[i+1] + " = " + String.format("%8s", Integer.toBinaryString(Byte.toUnsignedInt(temp[i/2])))); //Debug
+    		}
+    		//for(int i = 0; i < temp.length; i++) System.out.println(Integer.toString(Byte.toUnsignedInt(temp[i]),2));
+    	} catch(Exception e){
+    		e.printStackTrace();
+    	}
+    	
+    	gameBoard = new Board(temp);
+	}
+		
 
 	//Helper Methods
 	public static int toPos(int[] xy){

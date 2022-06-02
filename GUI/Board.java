@@ -18,7 +18,7 @@ class Board
 		//                      Black King        Black Rook        Black Rook        Black Knight      Black Knight      Black Bishop      Black Bishop      Black Queen
 								(byte)0b10000001, (byte)0b00000001, (byte)0b11100001, (byte)0b00100001, (byte)0b11000001, (byte)0b01000001, (byte)0b10100001, (byte)0b01100001,
 		//                      White Promoted    Black Promoted    White Promo Type  White Promo Type  Black Promo Type  Black Promo Type  Control
-								(byte)0b00000000, (byte)0b00000000, (byte)0b00000000, (byte)0b00000000, (byte)0b00000000, (byte)0b00000000, (byte)0b00000000};
+								(byte)0b00000000, (byte)0b00000000, (byte)0b00000000, (byte)0b00000000, (byte)0b00000000, (byte)0b00000000, (byte)0b00000001};
 		turn = true;
 		gameOver = false;
 		possibleMoves = new HashMap<GamePiece, ArrayList<Integer>>();
@@ -96,7 +96,7 @@ class Board
 		{
 			board.remove(from);
 			board.put(to, f);
-			compressed[f.index()] = (byte)(to<<2 + 0b11);
+			compressed[f.index()] = (byte)((to<<2) + 0b11);
 			f.setPos(to);
 			f.moved();
 			// Pawn checks for En Passant
@@ -169,12 +169,14 @@ class Board
 	{
 		return gameOver;
 	}
-	// Returns 1939597999b9d9f99d1dfd3ddd5dbd7d525456585a5c5e5811e121c141a1610000000 for a starting board
+	// Returns 1939597999b9d9f9 9d1dfd3ddd5dbd7d  525456585a5c5e581  1e121c141a161  0 0 0 0 0 0 0 for a starting board (old)
+	// Returns 1939597999b9d9f9 9d1dfd3ddd5dbd7d 0525456585a5c5e581 01e121c141a161 00000000000001 for a starting board (new)
 	private String compressedString()
 	{
 		String ret = "";
 		for(byte b: compressed)
-			ret += Integer.toString(Byte.toUnsignedInt(b), 16);
+			//ret += Integer.toString(Byte.toUnsignedInt(b), 16);
+			ret += String.format("%02x", Byte.toUnsignedInt(b));
 		return ret;
 	}
 	
