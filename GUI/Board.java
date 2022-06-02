@@ -140,7 +140,7 @@ class Board
 		{
 			board.remove(from);
 			board.put(to, f);
-			compressed[f.index()] = (byte)(to<<2 + 0b11);
+			compressed[f.index()] = (byte)((to<<2) + 0b11);
 			compressed[t.index()] -= 1;
 			f.setPos(to);
 			f.moved();
