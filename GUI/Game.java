@@ -3,7 +3,7 @@ import java.io.File;
 
 class Game{
 	Board gameBoard;
-	final boolean hax = false; 
+	final boolean hax = true; 
 
 	//Reset Variables
 	int turn; 
@@ -28,11 +28,13 @@ class Game{
 		//Clicked Already selected piece (Also handles clicking empty square w/ nothing selected)
 		if(newPiece == selected) return new int[]{-1,-1};
 		//Handle Hax mode capturing (Since technically all pieces are your pieces)
-		if(hax && newPiece != null && selected != null && gameBoard.possibleMoves.get(selected).contains(toPos(newXY))){
-    		//Moves
-            gameBoard.move(toPos(oldXY), toPos(newXY));
-            System.out.println("Hax Capture");
-            return new int[]{-1,-1};
+		if(hax) {
+			if (newPiece != null && selected != null && gameBoard.possibleMoves.get(selected).contains(toPos(newXY))) {
+				//Moves
+			    gameBoard.move(toPos(oldXY), toPos(newXY));
+			    System.out.println("Hax Capture");
+			    return new int[]{-1,-1};
+			}
 		}
 		//Clicked Own Piece
         if(newPiece != null && (newPiece.isWhite() == gameBoard.turn() || hax)) return newXY;

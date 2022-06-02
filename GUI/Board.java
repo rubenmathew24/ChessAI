@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 class Board
 {
 	private boolean turn;
@@ -87,7 +88,14 @@ class Board
 			if(p != null && (p.isWhite() == turn || hackMode))
 				possibleMoves.put(p, p.possibleMoves(board));
 	}
-	
+	public HashSet<Integer> allPossibleMoves(boolean team)
+	{
+		HashSet<Integer> r = new HashSet<Integer>();
+		for(GamePiece p: possibleMoves.keySet())
+			if(p.isWhite() == team)
+				r.addAll(possibleMoves.get(p));
+		return r;
+	}
 	// Assumes to -> from is a legal move
 	public void move(int from, int to)
 	{
