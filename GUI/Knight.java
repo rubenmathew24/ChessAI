@@ -14,7 +14,7 @@ class Knight extends GamePiece{
 		int[][] possibleMoves = {{X+1, Y+2}, {X+1, Y-2},
 								{X-1, Y+2}, {X-1, Y-2},
 								{X+2, Y+1}, {X+2, Y-1},
-								{X-2, Y+1}, {X+2, Y-1}};
+								{X-2, Y+1}, {X-2, Y-1}};
 		for(int[] move: possibleMoves)
 		{
 			if(0 > move[0] || 7 < move[0] || 0 > move[1] || 7 < move[1])
