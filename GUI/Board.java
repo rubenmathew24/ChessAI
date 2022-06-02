@@ -134,8 +134,18 @@ class Board
 	{
 		return gameOver;
 	}
-
-	public String toString(){
-		return "Hello! Nothing has caught fire";
+	public String compressedString()
+	{
+		String ret = "";
+		for(byte b: compressed)
+		{
+			ret += (char)(b>>4);
+			ret += (char)(b%16);
+		}
+		return ret;
+	}
+	public String toString()
+	{
+		return compressedString();
 	}
 }
