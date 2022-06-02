@@ -150,22 +150,28 @@ class Board
         final String border = "-------------------------";
         String board = border + "\n";
         String temp = "|";
+        int counter = 0;
         
-        for(GamePiece p : this.board.values()){
-            String piece = " ";
-    
-            //Check Piece letter
-            if(p instanceof Pawn)  piece = "P";
-            else if(p instanceof Bishop)piece = "B";
-            else if(p instanceof Knight)piece = "N";
-            else if(p instanceof Rook)  piece = "R";
-            else if(p instanceof King)  piece = "K";
-            else if(p instanceof Queen) piece = "Q";
-            
-            temp += ((p != null) ? ((p.isWhite()) ? "W" : "B") : " ") + piece + "|";
-        }
-        board += temp + "\n" + border + "\n";
-        temp = "|";
+        for(int i = 0; i < 8; i++){
+            for(int j = 0; j < 8; j++){
+                GamePiece p = this.board.get(i+(8*j));
+                String piece = " ";
+        
+                //Check Piece letter
+                if(p instanceof Pawn)  piece = "P";
+                else if(p instanceof Bishop)piece = "B";
+                else if(p instanceof Knight)piece = "N";
+                else if(p instanceof Rook)  piece = "R";
+                else if(p instanceof King)  piece = "K";
+                else if(p instanceof Queen) piece = "Q";
+                
+                temp += ((p != null) ? ((p.isWhite()) ? "W" : "B") : " ") + piece + "|";
+                if (++counter % 8 == 0){
+                	board += temp + "\n" + border + "\n";
+            		temp = "|";
+                }
+    		}    
+    	}
         
         return board;
     }

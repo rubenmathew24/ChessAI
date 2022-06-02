@@ -76,7 +76,7 @@ void mouseClicked(){
 	
 	//Check if its on the reset button
 	else if(mouseX >= boardOrigin + (8.5 * boxSize) && mouseX < boardOrigin + (10.8 * boxSize) && mouseY >= boardOrigin + (7.5 * boxSize) && mouseY < boardOrigin + (8 * boxSize)){
-		//g.reset();
+		g.reset();
 		
 		//Resets booleans
 		promoting = false;
@@ -94,7 +94,7 @@ void mouseClicked(){
 	//Allow Export of game
 	if(mouseX >= boardOrigin + (9.8 * boxSize) && mouseX < boardOrigin + (10.8 * boxSize) && mouseY >= boardOrigin + (6.8 * boxSize) && mouseY < boardOrigin + (7.3 * boxSize)){
 		PrintWriter export = createWriter("ExportedGame.txt");
-		//export.println(g.getBoardState());
+		export.println(g.gameBoard);
 		export.flush();
 		export.close();
 		

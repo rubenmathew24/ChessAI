@@ -10,6 +10,12 @@ class Game{
 		turn = 1; 
 		moves = "";
 	}
+	
+	public void reset(){
+		gameBoard = new Board();
+		turn = 1;
+		moves = "";
+	}
 
 	public int[] pieceSelected(int[] newXY, int[] oldXY){
 		
