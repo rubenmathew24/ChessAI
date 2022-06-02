@@ -3,7 +3,7 @@ import java.io.File;
 
 class Game{
 	Board gameBoard;
-	final boolean hax = true; 
+	boolean hax = true; 
 
 	//Reset Variables
 	int turn; 
@@ -117,6 +117,7 @@ class Game{
     	}
     	
     	gameBoard = new Board(temp);
+    	if(hax) gameBoard.toggleHackMode();
 	}
 		
 

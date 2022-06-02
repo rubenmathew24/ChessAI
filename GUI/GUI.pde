@@ -275,16 +275,18 @@ void selectedPieceGUI(){
         
         //Normal Capture
         if(g.gameBoard.board.get(pos) != null){
+            System.out.println("Normal Capture: " + pos);
         	fill(captureColor);
 			rect(boardOrigin + (moveTo[0] * boxSize), boardOrigin + (moveTo[1] * boxSize), boxSize, boxSize);
         } 
         
         //En Passant
-        else if(g.gameBoard.board.get(-1) != null && pos-g.gameBoard.board.get(-1).getPos() == (selectedPiece.isWhite()? -1 : 1)){
+        else if(g.gameBoard.board.get(-1) != null && selectedPiece != g.gameBoard.board.get(-1) && pos-g.gameBoard.board.get(-1).getPos() == (selectedPiece.isWhite()? -1 : 1)){
         	fill(captureColor);
             rect(boardOrigin + (moveTo[0] * boxSize), boardOrigin + (moveTo[1] * boxSize), boxSize, boxSize);
             fill(circleColor);
             circle(boardOrigin + moveTo[0]*boxSize + boxSize/2, boardOrigin + moveTo[1]*boxSize + boxSize/2, boxSize/10);
+            System.out.println("[En Passant Capture] - Pos: " + pos + " En Pawnsant Pos: " + g.gameBoard.board.get(-1).getPos());
         }
 
         //Normal Move
