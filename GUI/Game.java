@@ -3,11 +3,11 @@ import java.io.File;
 
 class Game{
 	Board gameBoard;
-	
+	final boolean hax = false; 
+
 	//Reset Variables
 	int turn; 
 	String moves;
-	final boolean hax = false; 
 	
 	public Game(){
 		reset();
