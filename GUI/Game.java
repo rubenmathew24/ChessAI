@@ -3,7 +3,7 @@ import java.io.File;
 
 class Game{
 	Board gameBoard;
-	boolean hax = true; 
+	public boolean hax = true; 
 
 	//Reset Variables
 	int turn; 
@@ -18,6 +18,12 @@ class Game{
 		turn = 1;
 		moves = "";
 		if(hax) gameBoard.toggleHackMode();
+	}
+
+	public boolean hack(){
+		hax = !hax;
+		if(hax) gameBoard.toggleHackMode();
+		return hax;
 	}
 
 	public int[] pieceSelected(int[] newXY, int[] oldXY){

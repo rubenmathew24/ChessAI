@@ -29,6 +29,8 @@ color circleColor = color(180);
 color moveOutlineColor = color(100);
 color gridOutlineColor = moveOutlineColor;
 color labelColor = moveOutlineColor;
+color haxIndicatorOn = color(0,255,0);
+color haxIndicatorOff = color(255,0,0);
 
 //Game Object
 Game g = new Game(); //Game Object
@@ -47,6 +49,9 @@ void draw() {
 	//Draw Board (Squares and labels)
 	grid();
 	
+	//Draw hax Button
+	haxButton();
+
 	//Draw Import Button
 	importButton();
 	
@@ -95,20 +100,47 @@ void mouseClicked(){
 		selected = new int[]{-1,-1};
 	}
 	
+	//Check if its on the hax button
+    else if(mouseX >= boardOrigin + (8.5 * boxSize) && mouseX < boardOrigin + (10.8 * boxSize) && mouseY >= boardOrigin + (6.1 * boxSize) && mouseY < boardOrigin + (6.6 * boxSize)){
+		g.hack();
+    }
+
 	//Allow Export of game
-	if(mouseX >= boardOrigin + (9.8 * boxSize) && mouseX < boardOrigin + (10.8 * boxSize) && mouseY >= boardOrigin + (6.8 * boxSize) && mouseY < boardOrigin + (7.3 * boxSize)){
+	else if(mouseX >= boardOrigin + (9.8 * boxSize) && mouseX < boardOrigin + (10.8 * boxSize) && mouseY >= boardOrigin + (6.8 * boxSize) && mouseY < boardOrigin + (7.3 * boxSize)){
     	selectOutput("Choose a name for Exported Game", "exportGame");	
 		System.out.println("\nExport Successful");
 	}
 	
 	//Allow Import of game
-	if(mouseX >= boardOrigin + (8.5 * boxSize) && mouseX < boardOrigin + (9.5 * boxSize) && mouseY >= boardOrigin + (6.8 * boxSize) && mouseY < boardOrigin + (7.3 * boxSize)){
+	else if(mouseX >= boardOrigin + (8.5 * boxSize) && mouseX < boardOrigin + (9.5 * boxSize) && mouseY >= boardOrigin + (6.8 * boxSize) && mouseY < boardOrigin + (7.3 * boxSize)){
 		selectInput("Select a file to process:", "importGame");
 		
 		//Reset booleans
 		//promoting = false;
 		//gameFinished = false;
 	}
+}
+
+//Method to create Hack Mode button
+void haxButton(){
+    //Variables
+    float buttonOrigin = boardOrigin + (8.5 * boxSize);
+    
+    //Setup
+    stroke(lightColor);
+    textSize(boxSize/4);
+    
+    //Button
+    fill(darkColor);
+    rect(buttonOrigin, boardOrigin + (6.1 * boxSize), 2.3*boxSize, boxSize/2);
+    
+    //Text
+    fill(lightColor);
+    text("Hacks Mode", buttonOrigin + (0.2 * boxSize), boardOrigin + (6.45 * boxSize));
+    
+    //Indicator
+    fill((g.hax) ? haxIndicatorOn : haxIndicatorOff);
+    rect(buttonOrigin + (1.8 * boxSize), boardOrigin + (6.18 * boxSize), boxSize/3, boxSize/3);
 }
 
 //Method to create import button

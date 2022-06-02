@@ -119,6 +119,7 @@ class Board
 				// Some idiot pawn is leaving En Passant up
 				if(to - from == (f.isWhite()? -2: 2))
 					board.put(-1, f);
+					//compressed[38] = something
 				else
 					board.remove(-1);
 			}
