@@ -148,7 +148,7 @@ class Board
 		turn = !turn;
 		compressed[38] = (byte)(compressed[38] + (turn? 1: -1));
 		updatePossibleMoves();
-		//Deal with promotion today
+		//Deal with promotion 6/3/22
 	}
 	//Accessor Methods
 	public GamePiece getPiece(int pos)
