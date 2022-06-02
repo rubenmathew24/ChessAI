@@ -148,12 +148,12 @@ class Board
 	{
 		return gameOver;
 	}
-
+	// Returns 1939597999b9d9f99d1dfd3ddd5dbd7d525456585a5c5e5811e121c141a1610000000 for a starting board
 	private String compressedString()
 	{
 		String ret = "";
 		for(byte b: compressed)
-			ret += Integer.toString(b, 16);
+			ret += Integer.toString(Byte.toUnsignedInt(b), 16);
 		return ret;
 	}
 	
@@ -189,7 +189,7 @@ class Board
 
 	public String toString()
 	{
-		return visualString();
+		return compressedString();
 	}
 	
     
