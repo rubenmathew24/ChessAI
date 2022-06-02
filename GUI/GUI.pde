@@ -348,13 +348,22 @@ void selectedPieceGUI(){
         
         int[] moveTo = Game.toXY(pos);
         
-        //Legal Capture
+        
+        //Normal Capture
         if(g.gameBoard.board.get(pos) != null){
         	fill(184, 117, 112);
 			rect(boardOrigin + (moveTo[0] * boxSize), boardOrigin + (moveTo[1] * boxSize), boxSize, boxSize);
         } 
         
-        //Legal Move
+        //En Passant
+        else if(g.gameBoard.board.get(-1) != null && pos-g.gameBoard.board.get(-1).getPos() == (selectedPiece.isWhite()? -1 : 1)){
+        	fill(184, 117, 112);
+            rect(boardOrigin + (moveTo[0] * boxSize), boardOrigin + (moveTo[1] * boxSize), boxSize, boxSize);
+            fill(180,180,180);
+            circle(boardOrigin + moveTo[0]*boxSize + boxSize/2, boardOrigin + moveTo[1]*boxSize + boxSize/2, boxSize/10);
+        }
+        //to-p.getPos() == (f.isWhite()? -1: 1)
+        //Normal Move
         else {       
             fill(180,180,180);
             circle(boardOrigin + moveTo[0]*boxSize + boxSize/2, boardOrigin + moveTo[1]*boxSize + boxSize/2, boxSize/10);
