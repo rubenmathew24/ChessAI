@@ -85,6 +85,7 @@ class Board
 				possibleMoves.put(p, p.possibleMoves(board));
 	}
 	
+	// Assumes to -> from is a legal move
 	public void move(int from, int to)
 	{
 		GamePiece f = board.get(from);
@@ -98,7 +99,7 @@ class Board
 			compressed[f.index()] = (byte)(to<<2 + 0b11);
 			f.setPos(to);
 			f.moved();
-			// Pawn is capturing via En Passant
+			// Pawn checks for En Passant
 			if(f instanceof Pawn)
 			{
 				p = board.get(-1);
@@ -112,6 +113,27 @@ class Board
 			}
 			else
 				board.remove(-1);
+			
+			// Castling
+			if(f instanceof King)
+			{
+				if(to-from == 16)
+				{
+					p = board.get(f.isWhite()? 63: 56);
+					board.remove(p.getPos());
+					board.put(p.getPos()-16, p);
+					p.setPos(p.getPos()-16);
+					p.moved();
+				}
+				else if(to-from == -16)
+				{
+					p = board.get(f.isWhite()? 7: 0);
+					board.remove(p.getPos());
+					board.put(p.getPos()+24, p);
+					p.setPos(p.getPos()+24);
+					p.moved();
+				}
+			}
 		}
 		//Capturing
 		else
@@ -126,7 +148,6 @@ class Board
 		turn = !turn;
 		updatePossibleMoves();
 		//Deal with promotion today
-		//Deal with castling today
 	}
 	//Accessor Methods
 	public GamePiece getPiece(int pos)
