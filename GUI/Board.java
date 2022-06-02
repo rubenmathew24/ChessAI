@@ -89,6 +89,7 @@ class Board
 	{
 		GamePiece f = board.get(from);
 		GamePiece t = board.get(to);
+		GamePiece p;
 		//Moving to empty space
 		if(t == null)
 		{
@@ -98,12 +99,17 @@ class Board
 			f.setPos(to);
 			f.moved();
 			// Pawn is capturing via En Passant
-			GamePiece p = board.get(-1);
-			if(p != null && to-p.getPos() == (f.isWhite()? -1: 1) && f instanceof Pawn)
-				board.remove(p.getPos());
-			// Some idiot pawn is leaving En Passant up
-			if(to - from == (f.isWhite()? -2: 2) && f instanceof Pawn)
-				board.put(-1, f);
+			if(f instanceof Pawn)
+			{
+				p = board.get(-1);
+				if(p != null && to-p.getPos() == (f.isWhite()? -1: 1))
+					board.remove(p.getPos());
+				// Some idiot pawn is leaving En Passant up
+				if(to - from == (f.isWhite()? -2: 2))
+					board.put(-1, f);
+				else
+					board.remove(-1);
+			}
 			else
 				board.remove(-1);
 		}
@@ -119,7 +125,6 @@ class Board
 		}
 		turn = !turn;
 		updatePossibleMoves();
-		//En Passant does not currently work
 		//Deal with promotion today
 		//Deal with castling today
 	}
@@ -148,10 +153,7 @@ class Board
 	{
 		String ret = "";
 		for(byte b: compressed)
-		{
-			ret += (char)(b>>4);
-			ret += (char)(b%16);
-		}
+			ret += Integer.toString(b, 16);
 		return ret;
 	}
 	
