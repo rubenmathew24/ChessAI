@@ -1,4 +1,4 @@
-//Version 1.2.8
+//Version 2.0
 
 //Adujustable Sizes
 
@@ -93,10 +93,7 @@ void mouseClicked(){
 	
 	//Allow Export of game
 	if(mouseX >= boardOrigin + (9.8 * boxSize) && mouseX < boardOrigin + (10.8 * boxSize) && mouseY >= boardOrigin + (6.8 * boxSize) && mouseY < boardOrigin + (7.3 * boxSize)){
-		PrintWriter export = createWriter("ExportedGame.txt");
-		export.println(g.gameBoard);
-		export.flush();
-		export.close();
+    	selectOutput("Choose a name for Exported Game", "exportGame");	
 		
 		System.out.println("\nExport Successful");
 	}
@@ -197,6 +194,17 @@ void importGame(File game) {
 		
 		g.importBoardState(game);
 		System.out.println("\nImport Successful");
+	}
+}
+
+void exportGame(File game) {
+	if (game == null){
+		println("Window was closed or the user hit cancel.");
+	} else {
+    	PrintWriter export = createWriter(game.getAbsolutePath());
+        export.println(g.gameBoard);
+        export.flush();
+        export.close();
 	}
 }
 
