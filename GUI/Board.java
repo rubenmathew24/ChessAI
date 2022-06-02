@@ -141,11 +141,12 @@ class Board
 			board.remove(from);
 			board.put(to, f);
 			compressed[f.index()] = (byte)(to<<2 + 0b11);
-			compressed[t.index()] += 1;
+			compressed[t.index()] -= 1;
 			f.setPos(to);
 			f.moved();
 		}
 		turn = !turn;
+		compressed[38] = (byte)(compressed[38] + (turn? 1: -1));
 		updatePossibleMoves();
 		//Deal with promotion today
 	}
