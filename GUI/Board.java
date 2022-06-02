@@ -134,7 +134,8 @@ class Board
 	{
 		return gameOver;
 	}
-	public String compressedString()
+
+	private String compressedString()
 	{
 		String ret = "";
 		for(byte b: compressed)
@@ -144,8 +145,35 @@ class Board
 		}
 		return ret;
 	}
+	
+	private String visualString(){
+        final String border = "-------------------------";
+        String board = border + "\n";
+        String temp = "|";
+        
+        for(GamePiece p : this.board.values()){
+            String piece = " ";
+    
+            //Check Piece letter
+            if(p instanceof Pawn)  piece = "P";
+            else if(p instanceof Bishop)piece = "B";
+            else if(p instanceof Knight)piece = "N";
+            else if(p instanceof Rook)  piece = "R";
+            else if(p instanceof King)  piece = "K";
+            else if(p instanceof Queen) piece = "Q";
+            
+            temp += ((p != null) ? ((p.isWhite()) ? "W" : "B") : " ") + piece + "|";
+        }
+        board += temp + "\n" + border + "\n";
+        temp = "|";
+        
+        return board;
+    }
+
 	public String toString()
 	{
-		return compressedString();
+		return visualString();
 	}
+	
+    
 }
