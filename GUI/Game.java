@@ -7,17 +7,17 @@ class Game{
 	//Reset Variables
 	int turn; 
 	String moves;
+	final boolean hax = false; 
 	
 	public Game(){
-		gameBoard = new Board();
-		turn = 1; 
-		moves = "";
+		reset();
 	}
 	
 	public void reset(){
 		gameBoard = new Board();
 		turn = 1;
 		moves = "";
+		if(hax) gameBoard.toggleHackMode();
 	}
 
 	public int[] pieceSelected(int[] newXY, int[] oldXY){
@@ -27,8 +27,15 @@ class Game{
 		
 		//Clicked Already selected piece (Also handles clicking empty square w/ nothing selected)
 		if(newPiece == selected) return new int[]{-1,-1};
+		//Handle Hax mode capturing (Since technically all pieces are your pieces)
+		if(hax && newPiece != null && selected != null && gameBoard.possibleMoves.get(selected).contains(toPos(newXY))){
+    		//Moves
+            gameBoard.move(toPos(oldXY), toPos(newXY));
+            System.out.println("Hax Capture");
+            return new int[]{-1,-1};
+		}
 		//Clicked Own Piece
-        if(newPiece != null && newPiece.isWhite() == gameBoard.turn()) return newXY;
+        if(newPiece != null && (newPiece.isWhite() == gameBoard.turn() || hax)) return newXY;
 		//Clicked Enemy Piece with nothing selected
 		if(newPiece != null && selected == null) return new int[]{-1,-1};
 		//Clicked Occupied or Empty Square with selected Piece

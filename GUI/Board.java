@@ -4,6 +4,7 @@ class Board
 {
 	private boolean turn;
 	private boolean gameOver;
+	private boolean hackMode;
 	private byte[] compressed;
 	public HashMap<Integer,GamePiece> board;
 	public HashMap<GamePiece, ArrayList<Integer>> possibleMoves;
@@ -21,6 +22,7 @@ class Board
 								(byte)0b00000000, (byte)0b00000000, (byte)0b00000000, (byte)0b00000000, (byte)0b00000000, (byte)0b00000000, (byte)0b00000001};
 		turn = true;
 		gameOver = false;
+		hackMode = false;
 		possibleMoves = new HashMap<GamePiece, ArrayList<Integer>>();
 		uncompressBoard();
 		updatePossibleMoves();
@@ -30,6 +32,7 @@ class Board
 		compressed = _compressed;
 		turn = (compressed[38] & 0b00000001) == 1;
 		gameOver = (compressed[38] & 0b00000010)>>1 == 1;
+		hackMode = false;
 		possibleMoves = new HashMap<GamePiece, ArrayList<Integer>>();
 		uncompressBoard();
 		updatePossibleMoves();
@@ -81,7 +84,7 @@ class Board
 	public void updatePossibleMoves()
 	{
 		for(GamePiece p: board.values())
-			if(p != null && p.isWhite() == turn)
+			if(p != null && (p.isWhite() == turn || hackMode))
 				possibleMoves.put(p, p.possibleMoves(board));
 	}
 	
@@ -145,8 +148,11 @@ class Board
 			f.setPos(to);
 			f.moved();
 		}
-		turn = !turn;
-		compressed[38] = (byte)(compressed[38] + (turn? 1: -1));
+
+		if(!hackMode){
+			turn = !turn;
+			compressed[38] = (byte)(compressed[38] + (turn? 1: -1));
+		}
 		updatePossibleMoves();
 		//Deal with promotion 6/3/22
 	}
@@ -165,13 +171,18 @@ class Board
 	{
 		return turn;
 	}
-	
+
 	public boolean gameOver()
 	{
 		return gameOver;
 	}
-	// Returns 1939597999b9d9f9 9d1dfd3ddd5dbd7d  525456585a5c5e581  1e121c141a161  0 0 0 0 0 0 0 for a starting board (old)
-	// Returns 1939597999b9d9f9 9d1dfd3ddd5dbd7d 0525456585a5c5e581 01e121c141a161 00000000000001 for a starting board (new)
+
+	public void toggleHackMode(){
+		this.hackMode = !this.hackMode;
+		updatePossibleMoves();
+	}
+
+	// Returns 1939597999b9d9f9 9d1dfd3ddd5dbd7d 0525456585a5c5e581 01e121c141a161 00000000000001 for a starting board
 	private String compressedString()
 	{
 		String ret = "";
