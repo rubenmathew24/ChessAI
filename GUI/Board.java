@@ -102,6 +102,7 @@ class Board
 		GamePiece f = board.get(from);
 		GamePiece t = board.get(to);
 		GamePiece p;
+		byte control;
 		//Moving to empty space
 		if(t == null)
 		{
@@ -118,10 +119,15 @@ class Board
 					board.remove(p.getPos());
 				// Some idiot pawn is leaving En Passant up
 				if(to - from == (f.isWhite()? -2: 2))
+				{
 					board.put(-1, f);
-					//compressed[38] = something
+					compressed[38] = (byte) (((f.index()%8) << 3) + (1 << 2) + (turn? 1 : 0));
+				}
 				else
+				{
 					board.remove(-1);
+					compressed[38] = (byte) (turn? 1 : 0);
+				}
 			}
 			else
 				board.remove(-1);
@@ -136,6 +142,7 @@ class Board
 					board.put(p.getPos()-16, p);
 					p.setPos(p.getPos()-16);
 					p.moved();
+					compressed[p.index()] = (byte)((p.getPos()<<2) + 0b11);
 				}
 				else if(to-from == -16)
 				{
@@ -144,6 +151,7 @@ class Board
 					board.put(p.getPos()+24, p);
 					p.setPos(p.getPos()+24);
 					p.moved();
+					compressed[p.index()] = (byte)((p.getPos()<<2) + 0b11);
 				}
 			}
 		}
