@@ -108,7 +108,7 @@ class Board
 		if(f instanceof Pawn && to%8 == (f.isWhite()? 0 : 7))
 		{
 			board.remove(from);
-			board.put(to%64, ((Pawn)f).promotedPiece(to/64));
+			board.put(to%64, ((Pawn)f).promotedPiece(to));
 			compressed[(f.isWhite()?32:33)] |= 1 << (f.index()%8);
 			int promotedIndex = (f.index()%16)*2+32*(f.index()<16? 0: 1);
 			compressed[(34+promotedIndex/8)] |= to/64 << (promotedIndex%16);
