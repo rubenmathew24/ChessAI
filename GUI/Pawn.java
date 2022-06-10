@@ -19,10 +19,10 @@ class Pawn extends GamePiece{
 		{
 			if(Y+dir == (this.isWhite()? 0 : 7))
 			{
-				moves.add(-1); // Queen
-				moves.add(-2); // Knight
-				moves.add(-3); // Rook
-				moves.add(-4); // Bishop
+				moves.add(pos); // Queen
+				moves.add(pos+64); // Knight
+				moves.add(pos+128); // Rook
+				moves.add(pos+192); // Bishop
 			}
 			else
 				moves.add(pos);

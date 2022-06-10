@@ -101,12 +101,27 @@ class Board
 	public void move(int from, int to)
 	{
 		GamePiece f = board.get(from);
-		GamePiece t = board.get(to);
+		GamePiece t = board.get(to % 64);
 		GamePiece p;
 		byte control;
-		//Moving to empty space
-		if(t == null)
+		//Promoting
+		if(f instanceof Pawn && to%8 == (f.isWhite()? 0 : 7))
 		{
+			board.remove(from);
+			board.put(to%64, ((Pawn)f).promotedPiece(to/64));
+			compressed[(f.isWhite()?32:33)] |= 1 << (f.index()%8);
+			int promotedIndex = (f.index()%16)*2+32*(f.index()<16? 0: 1);
+			compressed[(34+promotedIndex/8)] |= to/64 << (promotedIndex%16);
+			compressed[f.index()] = (byte)(((to%64)<<2) + 0b11);
+			f.setPos(to%64);
+			f.moved();
+			if(t != null)
+				compressed[t.index()] -= 1;
+		}
+		//Moving to empty space
+		else if(t == null)
+		{
+			to %= 64;
 			board.remove(from);
 			board.put(to, f);
 			compressed[f.index()] = (byte)((to<<2) + 0b11);
@@ -124,13 +139,6 @@ class Board
 					board.put(-1, f);
 					compressed[38] = (byte) (((f.index()%8) << 3) + (1 << 2) + (turn? 1 : 0));
 				}
-				else if(to < 0)
-				{
-					board.put(from + (f.isWhite()? -1: 1), ((Pawn)f).promotedPiece(1-to));
-					compressed[(f.isWhite()?32:33)] |= 1 << (f.index()%8);
-					int promotedIndex = (f.index()%16)*2+32*(f.index()<16? 0: 1);
-					compressed[(34+promotedIndex/8)] |= 1-to << (promotedIndex%16); 
-				}
 				else
 				{
 					board.remove(-1);
@@ -143,6 +151,7 @@ class Board
 			// Castling
 			if(f instanceof King)
 			{
+				to %= 64;
 				if(to-from == 16)
 				{
 					p = board.get(f.isWhite()? 63: 56);
@@ -166,6 +175,7 @@ class Board
 		//Capturing
 		else
 		{
+			to %= 64;
 			board.remove(from);
 			board.put(to, f);
 			compressed[f.index()] = (byte)((to<<2) + 0b11);
@@ -179,7 +189,6 @@ class Board
 			compressed[38] = (byte)(compressed[38] + (turn? 1: -1));
 		}
 		updatePossibleMoves();
-		//Deal with promotion 6/3/22
 	}
 	//Accessor Methods
 	public GamePiece getPiece(int pos)
