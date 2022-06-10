@@ -55,13 +55,13 @@ class Pawn extends GamePiece{
 		return moves;
 	}
 	
-	public GamePiece promotedPiece(int promotedIndex)
+	public GamePiece promotedPiece(int toPos)
 	{
 		Class[] promotedTypes = {Queen.class, Knight.class, Rook.class, Bishop.class};
 		Class[] params = {int.class, boolean.class, boolean.class, int.class};
 		
 		try {
-			return (GamePiece)promotedTypes[promotedIndex].getConstructor(params).newInstance(pos, hasMoved, pieceColor, compressedIndex);
+			return (GamePiece)promotedTypes[toPos/64].getConstructor(params).newInstance(toPos%64, hasMoved, pieceColor, compressedIndex);
 		} catch (Exception e) {}
 		return null;
 	}
