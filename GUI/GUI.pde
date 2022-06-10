@@ -16,8 +16,9 @@ boolean AIColor = true; // T/F AI color white/black
 
 //Game Variables
 int[] selected = {-1,-1}; //Stores X,Y of currently selected piece //{-1,-1} if nothing selected
+int[] promoting = {-1,-1,-1,-1}; //Stores X,Y of promoting piece, and X,Y of destination //{-1,-1,-1,-1} if nothing selected
 boolean gameFinished = false;
-boolean promoting = false;
+//boolean promoting = false;
 
 //Aesthetic Variables (R,G,B)
 color lightColor = color(238,238,213);
@@ -62,7 +63,7 @@ void draw() {
 	restartButton();
 	
 	//Promote Menu (for debugging)
-	//promoteMenu(false);
+	if(g.promoting) promoteMenu(g.gameBoard.turn());
 	
 	//Highlight selected piece and possible moves
 	selectedPieceGUI();
@@ -79,8 +80,10 @@ void mouseClicked(){
 	int y = (mouseY < boardOrigin) ? -1 : (mouseY-boardOrigin)/boxSize; //Checks if above board
 
 	//If Clicking on the board
-	if(!promoting && !gameFinished && (x >= 0 && x < 8 && y >= 0 && y < 8)){
+	if(!g.promoting && !gameFinished && (x >= 0 && x < 8 && y >= 0 && y < 8)){
 		selected = g.pieceSelected(new int[]{x,y}, selected);
+		if(g.promoting) promoting = new int[]{selected[0],selected[1],x,y};
+		else promoting = new int[]{-1,-1,-1,-1};
 	} 
 	
 	//Check if its on the reset button
@@ -88,7 +91,6 @@ void mouseClicked(){
 		g.reset();
 		
 		//Resets booleans
-		//promoting = false;
 		//gameFinished = false;
 		
 		//Handles Game Over and Promotion Menu
@@ -105,6 +107,11 @@ void mouseClicked(){
 		g.hack();
     }
 
+	//If Promoting
+  	else if(!gameFinished && g.promoting && mouseX >= boardOrigin + (8.1 * boxSize) && mouseX < boardOrigin + (9.1 * boxSize) && mouseY >= boardOrigin && mouseY < boardOrigin + (4*boxSize)){
+    	handlePromote(y);
+  	}
+
 	//Allow Export of game
 	else if(mouseX >= boardOrigin + (9.8 * boxSize) && mouseX < boardOrigin + (10.8 * boxSize) && mouseY >= boardOrigin + (6.8 * boxSize) && mouseY < boardOrigin + (7.3 * boxSize)){
     	selectOutput("Choose a name for Exported Game", "exportGame");	
@@ -116,9 +123,41 @@ void mouseClicked(){
 		selectInput("Select a file to process:", "importGame");
 		
 		//Reset booleans
-		//promoting = false;
 		//gameFinished = false;
 	}
+}
+
+void handlePromote(int toPromote){
+  //Codes
+  // Queen - 0
+  // Knight - 1
+  // Rook - 2
+  // Bishop - 3
+  g.promote(promoting, toPromote);
+  resetIndicators();
+  //boolean success = g.promote(toPromote);
+  /*if(success) {
+    
+    //Handles Promotion menu
+    promoting = false;
+    stroke(0);
+    fill(0);
+    rect(boardOrigin + (8.1*boxSize), boardOrigin, boxSize, 4*boxSize);
+    
+    if(g.checkForMate()){
+      King kC = g.GameBoard.getKing(g.GameBoard.getTurn());
+      gameOver(kC.inCheck);
+    }
+  }
+  else error();*/
+}
+
+void resetIndicators(){
+	//Handles Promotion menu
+    stroke(0);
+    strokeWeight(boxSize/20);
+    fill(0);
+    rect(boardOrigin + (8.1*boxSize), boardOrigin, boxSize, 4*boxSize);
 }
 
 //Method to create Hack Mode button
@@ -288,9 +327,9 @@ void grid() {
 //Method that Highlights the selected piece as well as possible moves and captures
 void selectedPieceGUI(){
 	//Get selected position, if nothing is selected then exit
-	if(selected[0] == -1 || selected[1] == -1) return;
 	int selectedPos = Game.toPos(selected); 
 	GamePiece selectedPiece = g.gameBoard.getPiece(selectedPos);
+	if(selectedPiece == null) return;
 	
 	//Higlights Chosen Piece
 	stroke(gridOutlineColor);
@@ -303,11 +342,10 @@ void selectedPieceGUI(){
     //Mark all legal moves of the selected piece
     for(int pos : g.gameBoard.possibleMoves.get(selectedPiece)){
         //X,Y of the move's ending square
-        int[] moveTo = Game.toXY(pos);
+        int[] moveTo = Game.toXY(pos%64);
         
         //Normal Capture
         if(g.gameBoard.board.get(pos) != null){
-            System.out.println("Normal Capture: " + pos);
         	fill(captureColor);
 			rect(boardOrigin + (moveTo[0] * boxSize), boardOrigin + (moveTo[1] * boxSize), boxSize, boxSize);
         } 
@@ -318,19 +356,55 @@ void selectedPieceGUI(){
             rect(boardOrigin + (moveTo[0] * boxSize), boardOrigin + (moveTo[1] * boxSize), boxSize, boxSize);
             fill(circleColor);
             circle(boardOrigin + moveTo[0]*boxSize + boxSize/2, boardOrigin + moveTo[1]*boxSize + boxSize/2, boxSize/10);
-            System.out.println("[En Passant Capture] - Pos: " + pos + " En Pawnsant Pos: " + g.gameBoard.board.get(-1).getPos());
         }
 
         //Normal Move
         else {       
             fill(circleColor);
             circle(boardOrigin + moveTo[0]*boxSize + boxSize/2, boardOrigin + moveTo[1]*boxSize + boxSize/2, boxSize/10);
+            //System.out.println("Normal: " + moveTo[0] + "," + moveTo[1]);
         }
     }
 }
 
 //Method to create menu to choose piece for pawn promotion
-//void promoteMenu(boolean pieceColor){}
+void promoteMenu(boolean pieceColor){
+  //Variables
+  PImage piece = null;
+  float gap = boardOrigin + (8.1*boxSize);
+  //QKRB
+  //Setup
+  stroke(100);
+  strokeWeight(boxSize/40);
+  fill(lightColor);
+ 
+  //Queen
+  rect(gap, boardOrigin, boxSize, boxSize); //Box 1
+  piece = loadImage(pieceColor ? "WhiteQueen.png" : "BlackQueen.png");
+  piece.resize(boxSize, boxSize);
+  image(piece, gap,  boardOrigin);
+  
+  //Rook
+  rect(gap, boardOrigin + (2*boxSize), boxSize, boxSize); //Box 3 
+  piece = loadImage(pieceColor ? "WhiteRook.png" : "BlackRook.png");
+  piece.resize(boxSize, boxSize);
+  image(piece, gap,  boardOrigin + (2*boxSize));
+  
+  //Change Colors
+  fill(darkColor);
+  
+  //Knight
+  rect(gap, boardOrigin + (1*boxSize), boxSize, boxSize); //Box 2
+  piece = loadImage(pieceColor ? "WhiteKnight.png" : "BlackKnight.png");
+  piece.resize(boxSize, boxSize);
+  image(piece, gap,  boardOrigin + (1*boxSize));
+  
+  //Bishop
+  rect(gap, boardOrigin + (3*boxSize), boxSize, boxSize); //Box 4
+  piece = loadImage(pieceColor ? "WhiteBishop.png" : "BlackBishop.png");
+  piece.resize(boxSize, boxSize);
+  image(piece, gap,  boardOrigin + (3*boxSize));
+}
 
 //Method to put all pieces on the board
 void drawPieces(){	

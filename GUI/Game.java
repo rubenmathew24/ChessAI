@@ -3,11 +3,12 @@ import java.io.File;
 
 class Game{
 	Board gameBoard;
-	public boolean hax = true; 
+	public boolean hax = false; 
+	public boolean promoting = false;
 
 	//Reset Variables
-	int turn; 
-	String moves;
+	//int turn; 
+	//String moves;
 	
 	public Game(){
 		reset();
@@ -15,15 +16,20 @@ class Game{
 	
 	public void reset(){
 		gameBoard = new Board();
-		turn = 1;
-		moves = "";
+		//turn = 1;
+		//moves = "";
 		if(hax) gameBoard.toggleHackMode();
 	}
 
 	public boolean hack(){
 		hax = !hax;
-		if(hax) gameBoard.toggleHackMode();
+		gameBoard.toggleHackMode();
 		return hax;
+	}
+
+	public void promote(int[] fromTo, int toPromote){
+		gameBoard.move(Game.toPos(fromTo[0],fromTo[1]),Game.toPos(fromTo[2],fromTo[3])+(64*toPromote));
+		promoting = false;
 	}
 
 	public int[] pieceSelected(int[] newXY, int[] oldXY){
@@ -38,7 +44,6 @@ class Game{
 			if (newPiece != null && selected != null && gameBoard.possibleMoves.get(selected).contains(toPos(newXY))) {
 				//Moves
 			    gameBoard.move(toPos(oldXY), toPos(newXY));
-			    System.out.println("Hax Capture");
 			    return new int[]{-1,-1};
 			}
 		}
@@ -49,9 +54,13 @@ class Game{
 		//Clicked Occupied or Empty Square with selected Piece
 		if(selected != null && gameBoard.possibleMoves.get(selected).contains(toPos(newXY))) {
     		//Moves
-    		gameBoard.move(toPos(oldXY), toPos(newXY));
-    		System.out.println("Legal Move");
-    		return new int[]{-1,-1};
+    		if(selected instanceof Pawn && newXY[1] == (selected.isWhite()? 0 : 7)){
+    			promoting = true;
+    		} else {
+        		gameBoard.move(toPos(oldXY), toPos(newXY));
+        		System.out.println("Legal Move");
+        		return new int[]{-1,-1};
+    		}
     	}
 		
 		return oldXY;
@@ -127,9 +136,14 @@ class Game{
 	}
 		
 
+
 	//Helper Methods
 	public static int toPos(int[] xy){
     	return 8*xy[0]+xy[1];
+	}
+
+	public static int toPos(int x, int y){
+    	return 8*x+y;
 	}
 
 	public static int[] toXY(int pos){
