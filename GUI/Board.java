@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+
 class Board
 {
 	private boolean turn;
@@ -122,6 +123,13 @@ class Board
 				{
 					board.put(-1, f);
 					compressed[38] = (byte) (((f.index()%8) << 3) + (1 << 2) + (turn? 1 : 0));
+				}
+				else if(to < 0)
+				{
+					board.put(from + (f.isWhite()? -1: 1), ((Pawn)f).promotedPiece(1-to));
+					compressed[(f.isWhite()?32:33)] |= 1 << (f.index()%8);
+					int promotedIndex = (f.index()%16)*2+32*(f.index()<16? 0: 1);
+					compressed[(34+promotedIndex/8)] |= 1-to << (promotedIndex%16); 
 				}
 				else
 				{
