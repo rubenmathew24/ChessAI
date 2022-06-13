@@ -48,7 +48,10 @@ class Game{
 			}
 		}
 		//Clicked Own Piece
-        if(newPiece != null && (newPiece.isWhite() == gameBoard.turn() || hax)) return newXY;
+        if(newPiece != null && (newPiece.isWhite() == gameBoard.turn() || hax)){
+            System.out.println(newPiece);
+            return newXY;
+        }
 		//Clicked Enemy Piece with nothing selected
 		if(newPiece != null && selected == null) return new int[]{-1,-1};
 		//Clicked Occupied or Empty Square with selected Piece
@@ -127,14 +130,14 @@ class Game{
     		for(int i = 0; i < c.length; i+=2){
         		//temp[i/2] = Byte.parseByte(""+c[i]+c[i+1], 16);
         		temp[i/2] = (byte) ((Character.digit(c[i],16) << 4) + Character.digit(c[i+1], 16));
-        		System.out.println(i/2 +": "+c[i]+c[i+1] + " = " + String.format("%8s", Integer.toBinaryString(Byte.toUnsignedInt(temp[i/2])))); //Debug
+        		System.out.println(String.format("%2s",i/2) +": "+c[i]+c[i+1] + " = " + String.format("%8s", Integer.toBinaryString(Byte.toUnsignedInt(temp[i/2]))).replace(" ", "0")); //Debug
     		}
     		//for(int i = 0; i < temp.length; i++) System.out.println(Integer.toString(Byte.toUnsignedInt(temp[i]),2));
     	} catch(Exception e){
     		e.printStackTrace();
     	}
     	
-    	gameBoard = new Board(temp);
+    	gameBoard = new ChessEncoder().constructBoard(temp);
     	if(hax) gameBoard.toggleHackMode();
 	}
 		

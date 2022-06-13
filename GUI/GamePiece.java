@@ -63,4 +63,8 @@ abstract class GamePiece
 		for(int i = 0; i < moves.size(); i++) temp[i] = moves.get(i);
 		return temp;
 	}
+
+	public String toString(){
+		return "Type: " + img.substring(0, img.length()-4) + "\nPos = " + pos + "\npieceColor = " + pieceColor + "\nhasMoved = " + hasMoved + "\n";
+	}
 }
