@@ -40,8 +40,8 @@ public class ChessEncoder
 		Node Q = new Node(new Queen(-1, false, true, -1)), q = new Node(new Queen(-1, false, false, -1));
 		Node R = new Node(new Rook(-1, false, true, -1)), r = new Node(new Rook(-1, false, false, -1));
 		Node N = new Node(new Knight(-1, false, true, -1)), n = new Node(new Knight(-1, false, false, -1));
-		Node B = new Node(new Bishop(-1, false, true, -1)), b = new Node(new Bishop(-1, false, true, -1));
-		Node P = new Node(new Pawn(-1, false, true, -1)), p = new Node(new Pawn(-1, false, true, -1));
+		Node B = new Node(new Bishop(-1, false, true, -1)), b = new Node(new Bishop(-1, false, false, -1));
+		Node P = new Node(new Pawn(-1, false, true, -1)), p = new Node(new Pawn(-1, false, false, -1));
 		
 		Node t1;
 		
