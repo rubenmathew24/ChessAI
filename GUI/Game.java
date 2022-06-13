@@ -59,6 +59,9 @@ class Game{
     		} else {
         		gameBoard.move(toPos(oldXY), toPos(newXY));
         		System.out.println("Legal Move");
+        		ChessEncoder ce = new ChessEncoder();
+        		byte[] com = ce.compressBoardState(gameBoard);
+        		System.out.println(ce.constructBoard(com).visualString());
         		return new int[]{-1,-1};
     		}
     	}

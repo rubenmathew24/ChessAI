@@ -17,8 +17,7 @@ boolean AIColor = true; // T/F AI color white/black
 //Game Variables
 int[] selected = {-1,-1}; //Stores X,Y of currently selected piece //{-1,-1} if nothing selected
 int[] promoting = {-1,-1,-1,-1}; //Stores X,Y of promoting piece, and X,Y of destination //{-1,-1,-1,-1} if nothing selected
-boolean gameFinished = false;
-//boolean promoting = false;
+//boolean gameFinished = false;
 
 //Aesthetic Variables (R,G,B)
 color lightColor = color(238,238,213);
@@ -62,7 +61,7 @@ void draw() {
 	//Draw Restart Button
 	restartButton();
 	
-	//Promote Menu (for debugging)
+	//Promote Menu (only if able to promote)
 	if(g.promoting) promoteMenu(g.gameBoard.turn());
 	
 	//Highlight selected piece and possible moves
@@ -80,7 +79,7 @@ void mouseClicked(){
 	int y = (mouseY < boardOrigin) ? -1 : (mouseY-boardOrigin)/boxSize; //Checks if above board
 
 	//If Clicking on the board
-	if(!g.promoting && !gameFinished && (x >= 0 && x < 8 && y >= 0 && y < 8)){
+	if(!g.promoting && (x >= 0 && x < 8 && y >= 0 && y < 8)){
 		selected = g.pieceSelected(new int[]{x,y}, selected);
 		if(g.promoting) promoting = new int[]{selected[0],selected[1],x,y};
 		else promoting = new int[]{-1,-1,-1,-1};
@@ -89,14 +88,7 @@ void mouseClicked(){
 	//Check if its on the reset button
 	else if(mouseX >= boardOrigin + (8.5 * boxSize) && mouseX < boardOrigin + (10.8 * boxSize) && mouseY >= boardOrigin + (7.5 * boxSize) && mouseY < boardOrigin + (8 * boxSize)){
 		g.reset();
-		
-		//Resets booleans
-		//gameFinished = false;
-		
-		//Handles Game Over and Promotion Menu
-		//stroke(0);
-		//fill(0);
-		//rect(boardOrigin + (8.1*boxSize), boardOrigin, 8*boxSize, 6*boxSize);
+		resetIndicators();
 		
 		//Unselects
 		selected = new int[]{-1,-1};
@@ -108,7 +100,7 @@ void mouseClicked(){
     }
 
 	//If Promoting
-  	else if(!gameFinished && g.promoting && mouseX >= boardOrigin + (8.1 * boxSize) && mouseX < boardOrigin + (9.1 * boxSize) && mouseY >= boardOrigin && mouseY < boardOrigin + (4*boxSize)){
+  	else if(g.promoting && mouseX >= boardOrigin + (8.1 * boxSize) && mouseX < boardOrigin + (9.1 * boxSize) && mouseY >= boardOrigin && mouseY < boardOrigin + (4*boxSize)){
     	handlePromote(y);
   	}
 

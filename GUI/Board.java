@@ -262,7 +262,7 @@ class Board
 		updatePossibleMoves();
 	}
 	// Returns 1939597999b9d9f9 9d1dfd3ddd5dbd7d 0525456585a5c5e581 01e121c141a161 00000000000001 for a starting board
-	private String compressedString()
+	public String compressedString()
 	{
 		String ret = "";
 		for(byte b: compressed)
@@ -270,7 +270,7 @@ class Board
 			ret += String.format("%02x", Byte.toUnsignedInt(b));
 		return ret;
 	}
-	private String visualString(){
+	public String visualString(){
         final String border = "-------------------------";
         String board = border + "\n";
         String temp = "|";
