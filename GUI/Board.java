@@ -147,8 +147,6 @@ class Board
 			compressed[f.index()] = (byte)((to<<2) + 0b11);
 			compressed[t.index()] -= 1;
 		}
-		if(!hackMode)
-			compressed[38] = (byte)(compressed[38] + (turn? 1: -1));
 	}
 	public void updateBoardState(int from, int to)
 	{
@@ -218,18 +216,20 @@ class Board
 			f.setPos(to);
 			f.moved();
 		}
-		
-		if(!hackMode)
-			turn = !turn;
 	}
 	// Assumes to -> from is a legal move
 	public void move(int from, int to)
 	{
 		updateCompressedState(from, to);
 		updateBoardState(from, to);
+		if(!hackMode)
+		{
+			turn = !turn;
+			compressed[38] = (byte)(compressed[38] + (turn? 1: -1));
+		}
 		updatePossibleMoves();
 	}
-	//Accessor Methods
+	// Accessor Methods
 	public GamePiece getPiece(int pos)
 	{
 		return board.get(pos);
