@@ -217,6 +217,7 @@ public class ChessEncoder
 				} catch (Exception e) {}
 			}
 		}
+		return new Board(turn, board);
 	}
 	
 	private int getBit(int i, byte[] compressed)
