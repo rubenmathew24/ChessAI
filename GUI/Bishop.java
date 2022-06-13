@@ -58,4 +58,8 @@ class Bishop extends GamePiece{
 	
 		return moves;
 	}
+
+	public Bishop clone() throws CloneNotSupportedException {
+        return new Bishop(this.pos, this.hasMoved, this.pieceColor);
+    }
 }

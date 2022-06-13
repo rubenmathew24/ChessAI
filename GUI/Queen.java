@@ -99,4 +99,8 @@ class Queen extends GamePiece{
 		
 		return moves;
 	}
+
+	public Queen clone() throws CloneNotSupportedException {
+        return new Queen(this.pos, this.hasMoved, this.pieceColor);
+    }
 }

@@ -57,4 +57,8 @@ class Rook extends GamePiece{
 		
 		return moves;
 	}
+
+	public Rook clone() throws CloneNotSupportedException {
+        return new Rook(this.pos, this.hasMoved, this.pieceColor);
+    }
 }

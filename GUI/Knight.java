@@ -28,4 +28,8 @@ class Knight extends GamePiece{
 
 		return moves;
 	}
+
+	public Knight clone() throws CloneNotSupportedException {
+        return new Knight(this.pos, this.hasMoved, this.pieceColor);
+    }
 }

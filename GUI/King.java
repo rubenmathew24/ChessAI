@@ -53,4 +53,8 @@ class King extends GamePiece{
         
         return moves;
 	}
+
+	public King clone() throws CloneNotSupportedException {
+        return new King(this.pos, this.hasMoved, this.pieceColor);
+    }
 }

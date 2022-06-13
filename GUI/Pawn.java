@@ -65,4 +65,8 @@ class Pawn extends GamePiece{
 		} catch (Exception e) {}
 		return null;
 	}
+
+	public Pawn clone() throws CloneNotSupportedException {
+        return new Pawn(this.pos, this.hasMoved, this.pieceColor);
+    }
 }

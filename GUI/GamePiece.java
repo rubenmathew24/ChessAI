@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 import java.util.HashMap;
-abstract class GamePiece
+abstract class GamePiece implements Cloneable
 {
 	protected int pos;
 	protected boolean pieceColor;
@@ -67,4 +67,6 @@ abstract class GamePiece
 	public String toString(){
 		return "Type: " + img.substring(0, img.length()-4) + "\nPos = " + pos + "\npieceColor = " + pieceColor + "\nhasMoved = " + hasMoved + "\n";
 	}
+
+	public abstract GamePiece clone() throws CloneNotSupportedException;
 }
