@@ -172,7 +172,7 @@ public class ChessEncoder
 		// Traverse Huffman Tree
 		Node n;
 		HashMap<Integer, GamePiece> board = new HashMap<Integer, GamePiece>();
-		Class[] params = new Class[]{int.class, boolean.class, boolean.class, int.class};
+		Class[] params = new Class[]{int.class, boolean.class, boolean.class};
 		boolean hasMoved = false;
 		GamePiece t, p;
 		for(int pos=0; pos < 64; pos++)
@@ -220,8 +220,7 @@ public class ChessEncoder
 					hasMoved = false;
 				
 				try {
-					// TODO: Replace all gamePiece Constructors with one that no longer has a compressed Index
-					p = t.getClass().getConstructor(params).newInstance(pos, hasMoved, t.isWhite(), -1);
+					p = t.getClass().getConstructor(params).newInstance(pos, hasMoved, t.isWhite());
 					board.put(pos, p);
 					if(enPassantPossible && pos == 8*enPassantColumn + (turn? 3 : 4))
 						board.put(-1, p);
