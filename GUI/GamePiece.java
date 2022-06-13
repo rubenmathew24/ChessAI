@@ -6,13 +6,11 @@ abstract class GamePiece
 	protected boolean pieceColor;
 	protected boolean hasMoved;
 	protected String img;
-	protected int compressedIndex;
-	public GamePiece(int pos_, boolean hasMoved_, boolean pieceColor_, int ind_)
+	public GamePiece(int pos_, boolean hasMoved_, boolean pieceColor_)
 	{
 		pos = pos_;
 		hasMoved = hasMoved_;
 		pieceColor = pieceColor_;
-		compressedIndex = ind_;
 		img = "";
 	}
 	public void setPos(int pos_)
@@ -46,10 +44,6 @@ abstract class GamePiece
 	public boolean isWhite()
 	{
 		return pieceColor;
-	}
-	public int index()
-	{
-		return compressedIndex;
 	}
 	abstract public ArrayList<Integer> possibleMoves(HashMap<Integer, GamePiece> board);
 	public int isLegalMove(HashMap<Integer, GamePiece> board, int pos)

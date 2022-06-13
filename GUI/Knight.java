@@ -1,8 +1,8 @@
 import java.util.HashMap;
 import java.util.ArrayList;
 class Knight extends GamePiece{
-	public Knight(int pos_, boolean hasMoved_, boolean pieceColor_, int ind_){
-		super(pos_, hasMoved_, pieceColor_, ind_);
+	public Knight(int pos_, boolean hasMoved_, boolean pieceColor_){
+		super(pos_, hasMoved_, pieceColor_);
 		this.img = (this.pieceColor) ? "WhiteKnight.png" : "BlackKnight.png";
 	}
 	
