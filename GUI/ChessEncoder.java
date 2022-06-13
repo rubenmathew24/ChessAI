@@ -190,11 +190,11 @@ public class ChessEncoder
 				if(t instanceof King)
 				{
 					if(t.isWhite() && (L || R))
-						hasMoved = true;
-					else if(!t.isWhite() && (l || r))
-						hasMoved = true;
-					else
 						hasMoved = false;
+					else if(!t.isWhite() && (l || r))
+						hasMoved = false;
+					else
+						hasMoved = true;
 				}
 				else if(t instanceof Rook)
 				{
