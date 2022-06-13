@@ -10,7 +10,7 @@ class Board
 	private byte[] compressed;
 	public HashMap<Integer,GamePiece> board;
 	public HashMap<GamePiece, ArrayList<Integer>> possibleMoves;
-	
+	private ChessEncoder ce;
 	
 	public Board()
 	{
@@ -18,13 +18,7 @@ class Board
 	}
 	public Board(byte[] _compressed)
 	{
-		compressed = _compressed;
-		turn = (compressed[38] & 0b00000001) == 1;
-		gameOver = (compressed[38] & 0b00000010)>>1 == 1;
-		hackMode = false;
-		possibleMoves = new HashMap<GamePiece, ArrayList<Integer>>();
-		uncompressBoard();
-		updatePossibleMoves();
+		
 	}
 	public Board(boolean _turn, HashMap<Integer, GamePiece> _board)
 	{
