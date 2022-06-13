@@ -97,8 +97,60 @@ class Board
 				r.addAll(possibleMoves.get(p));
 		return r;
 	}
-	// Assumes to -> from is a legal move
-	public void move(int from, int to)
+	public void updateCompressedState(int from, int to)
+	{
+		GamePiece f = board.get(from);
+		GamePiece t = board.get(to % 64);
+		GamePiece p;
+		//Promoting
+		if(f instanceof Pawn && to%8 == (f.isWhite()? 0 : 7))
+		{
+			compressed[(f.isWhite()?32:33)] |= 1 << (f.index()%8);
+			int promotedIndex = (f.index()%16)*2+32*(f.index()<16? 0: 1);
+			compressed[(34+promotedIndex/8)] |= to/64 << (promotedIndex%16);
+			compressed[f.index()] = (byte)(((to%64)<<2) + 0b11);
+			if(t != null)
+				compressed[t.index()] -= 1;
+		}
+		//Moving to empty space
+		else if(t == null)
+		{
+			to %= 64;
+			compressed[f.index()] = (byte)((to<<2) + 0b11);
+			// Pawn checks for En Passant
+			if(f instanceof Pawn)
+			{
+				p = board.get(-1);
+				// Some idiot pawn is leaving En Passant up
+				if(to - from == (f.isWhite()? -2: 2))
+					compressed[38] = (byte) (((f.index()%8) << 3) + (1 << 2) + (turn? 1 : 0));
+				else
+					compressed[38] = (byte) (turn? 1 : 0);
+			}
+			// Castling
+			if(f instanceof King)
+				if((to%64)-from == 16)
+				{
+					p = board.get(f.isWhite()? 63: 56);
+					compressed[p.index()] = (byte)((p.getPos()<<2) + 0b11);
+				}
+				else if((to%64)-from == -16)
+				{
+					p = board.get(f.isWhite()? 7: 0);
+					compressed[p.index()] = (byte)((p.getPos()<<2) + 0b11);
+				}
+		}
+		//Capturing
+		else
+		{
+			to %= 64;
+			compressed[f.index()] = (byte)((to<<2) + 0b11);
+			compressed[t.index()] -= 1;
+		}
+		if(!hackMode)
+			compressed[38] = (byte)(compressed[38] + (turn? 1: -1));
+	}
+	public void updateBoardState(int from, int to)
 	{
 		GamePiece f = board.get(from);
 		GamePiece t = board.get(to % 64);
@@ -109,14 +161,8 @@ class Board
 		{
 			board.remove(from);
 			board.put(to%64, ((Pawn)f).promotedPiece(to));
-			compressed[(f.isWhite()?32:33)] |= 1 << (f.index()%8);
-			int promotedIndex = (f.index()%16)*2+32*(f.index()<16? 0: 1);
-			compressed[(34+promotedIndex/8)] |= to/64 << (promotedIndex%16);
-			compressed[f.index()] = (byte)(((to%64)<<2) + 0b11);
 			f.setPos(to%64);
 			f.moved();
-			if(t != null)
-				compressed[t.index()] -= 1;
 		}
 		//Moving to empty space
 		else if(t == null)
@@ -124,7 +170,6 @@ class Board
 			to %= 64;
 			board.remove(from);
 			board.put(to, f);
-			compressed[f.index()] = (byte)((to<<2) + 0b11);
 			f.setPos(to);
 			f.moved();
 			// Pawn checks for En Passant
@@ -135,15 +180,9 @@ class Board
 					board.remove(p.getPos());
 				// Some idiot pawn is leaving En Passant up
 				if(to - from == (f.isWhite()? -2: 2))
-				{
 					board.put(-1, f);
-					compressed[38] = (byte) (((f.index()%8) << 3) + (1 << 2) + (turn? 1 : 0));
-				}
 				else
-				{
 					board.remove(-1);
-					compressed[38] = (byte) (turn? 1 : 0);
-				}
 			}
 			else
 				board.remove(-1);
@@ -159,7 +198,6 @@ class Board
 					board.put(p.getPos()-16, p);
 					p.setPos(p.getPos()-16);
 					p.moved();
-					compressed[p.index()] = (byte)((p.getPos()<<2) + 0b11);
 				}
 				else if(to-from == -16)
 				{
@@ -168,7 +206,6 @@ class Board
 					board.put(p.getPos()+24, p);
 					p.setPos(p.getPos()+24);
 					p.moved();
-					compressed[p.index()] = (byte)((p.getPos()<<2) + 0b11);
 				}
 			}
 		}
@@ -178,16 +215,18 @@ class Board
 			to %= 64;
 			board.remove(from);
 			board.put(to, f);
-			compressed[f.index()] = (byte)((to<<2) + 0b11);
-			compressed[t.index()] -= 1;
 			f.setPos(to);
 			f.moved();
 		}
-
-		if(!hackMode){
+		
+		if(!hackMode)
 			turn = !turn;
-			compressed[38] = (byte)(compressed[38] + (turn? 1: -1));
-		}
+	}
+	// Assumes to -> from is a legal move
+	public void move(int from, int to)
+	{
+		updateCompressedState(from, to);
+		updateBoardState(from, to);
 		updatePossibleMoves();
 	}
 	//Accessor Methods
