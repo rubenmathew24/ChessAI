@@ -222,6 +222,7 @@ class Board
 			to %= 64;
 			board.remove(from);
 			board.put(to, f);
+			board.remove(-1);
 			f.setPos(to);
 			f.moved();
 		}
