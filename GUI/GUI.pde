@@ -242,7 +242,9 @@ void exportGame(File game) {
 		println("Window was closed or the user hit cancel.");
 	} else {
     	//Exports game to chosen file
-    	PrintWriter export = createWriter(game.getAbsolutePath());
+    	String path = game.getAbsolutePath();
+    	if(!path.substring(path.length()-4).equals(".txt")) path += ".txt";
+    	PrintWriter export = createWriter(path);
         export.println(g.gameBoard);
         export.flush();
         export.close();
