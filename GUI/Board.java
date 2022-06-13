@@ -10,21 +10,20 @@ class Board
 	private byte[] compressed;
 	public HashMap<Integer,GamePiece> board;
 	public HashMap<GamePiece, ArrayList<Integer>> possibleMoves;
-	private ChessEncoder ce;
-	
+	private static ChessEncoder ce = new ChessEncoder();
+	private boolean compressedChanged;
 	public Board()
 	{
 		// Rubens fault
 	}
-	public Board(byte[] _compressed)
-	{
-		
-	}
-	public Board(boolean _turn, HashMap<Integer, GamePiece> _board)
+	// Used by ChessEncoder to create Boards
+	public Board(boolean _turn, HashMap<Integer, GamePiece> _board, byte[] _compressed)
 	{
 		turn = _turn;
 		gameOver = false;
 		board = _board;
+		compressed = _compressed;
+		compressedChanged = false;
 	}
 	public void updatePossibleMoves()
 	{
@@ -40,7 +39,11 @@ class Board
 				r.addAll(possibleMoves.get(p));
 		return r;
 	}
-	public void updateBoardState(int from, int to)
+	private void updateCompressedState()
+	{
+		compressed = ce.compressBoardState(this);
+	}
+	private void updateBoardState(int from, int to)
 	{
 		GamePiece f = board.get(from);
 		GamePiece t = board.get(to % 64);
@@ -117,6 +120,7 @@ class Board
 		if(!hackMode)
 			turn = !turn;
 		updatePossibleMoves();
+		compressedChanged = true;
 	}
 	// Accessor Methods
 	public GamePiece getPiece(int pos)
@@ -125,6 +129,8 @@ class Board
 	}
 	public byte[] getCompressed()
 	{
+		if(compressedChanged)
+			updateCompressedState();
 		return compressed;
 	}
 	public boolean turn()

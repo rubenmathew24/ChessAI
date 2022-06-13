@@ -36,12 +36,12 @@ public class ChessEncoder
 	{
 		tree = new Node();
 		Node empty = new Node((GamePiece)null);
-		Node K = new Node(new King(-1, false, true, -1)), k = new Node(new King(-1, false, false, -1));
-		Node Q = new Node(new Queen(-1, false, true, -1)), q = new Node(new Queen(-1, false, false, -1));
-		Node R = new Node(new Rook(-1, false, true, -1)), r = new Node(new Rook(-1, false, false, -1));
-		Node N = new Node(new Knight(-1, false, true, -1)), n = new Node(new Knight(-1, false, false, -1));
-		Node B = new Node(new Bishop(-1, false, true, -1)), b = new Node(new Bishop(-1, false, false, -1));
-		Node P = new Node(new Pawn(-1, false, true, -1)), p = new Node(new Pawn(-1, false, false, -1));
+		Node K = new Node(new King(-1, false, true)), k = new Node(new King(-1, false, false));
+		Node Q = new Node(new Queen(-1, false, true)), q = new Node(new Queen(-1, false, false));
+		Node R = new Node(new Rook(-1, false, true)), r = new Node(new Rook(-1, false, false));
+		Node N = new Node(new Knight(-1, false, true)), n = new Node(new Knight(-1, false, false));
+		Node B = new Node(new Bishop(-1, false, true)), b = new Node(new Bishop(-1, false, false));
+		Node P = new Node(new Pawn(-1, false, true)), p = new Node(new Pawn(-1, false, false));
 		
 		Node t1;
 		
@@ -229,7 +229,7 @@ public class ChessEncoder
 				} catch (Exception e) {}
 			}
 		}
-		return new Board(turn, board);
+		return new Board(turn, board, c);
 	}
 	
 	public byte[] compressBoardState(Board b)
