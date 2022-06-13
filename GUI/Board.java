@@ -85,6 +85,8 @@ class Board
 				try
 				{
 					board.put(pos, (GamePiece)types[i%16].getConstructor(params).newInstance(pos, hasMoved, color, i));
+					if(board.get(pos) instanceof King)
+						board.put(board.get(pos).isWhite()? -2: -3, board.get(pos));
 				} catch(Exception e) {System.err.print(e);}
 		}
 		if(!enPassant)
