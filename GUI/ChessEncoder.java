@@ -211,7 +211,7 @@ public class ChessEncoder
 				}
 				else if(t instanceof Pawn)
 				{
-					if(pos%8 == (t.isWhite()? 1 : 6))
+					if(pos%8 == (t.isWhite()? 6 : 1))
 						hasMoved = false;
 					else
 						hasMoved = true;
