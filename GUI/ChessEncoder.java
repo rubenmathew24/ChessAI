@@ -243,7 +243,7 @@ public class ChessEncoder
 		boolean R = (!board.get(-2).hasMoved() && board.get(63) instanceof Rook && !board.get(63).hasMoved());
 		boolean l = (!board.get(-3).hasMoved() && board.get(0) instanceof Rook && !board.get(0).hasMoved());
 		boolean r = (!board.get(-3).hasMoved() && board.get(56) instanceof Rook && !board.get(56).hasMoved());
-		int enPassantColumn = (board.get(-1) != null)? board.get(-1).getY() : -1;
+		int enPassantColumn = (board.get(-1) != null)? board.get(-1).getX() : -1;
 		
 		compressed.add((L || R || l || r)? 1 : 0);
 		compressed.add((enPassantColumn > 0)? 1 : 0);
