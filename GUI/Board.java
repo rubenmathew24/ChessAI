@@ -10,6 +10,8 @@ class Board
 	private byte[] compressed;
 	public HashMap<Integer,GamePiece> board;
 	public HashMap<GamePiece, ArrayList<Integer>> possibleMoves;
+	
+	
 	public Board()
 	{
 		//                      White Pawn 0      White Pawn 1      White Pawn 2      White Pawn 3      White Pawn 4      White Pawn 5      White Pawn 6      White Pawn 7
@@ -38,6 +40,12 @@ class Board
 		possibleMoves = new HashMap<GamePiece, ArrayList<Integer>>();
 		uncompressBoard();
 		updatePossibleMoves();
+	}
+	public Board(boolean _turn, HashMap<Integer, GamePiece> _board)
+	{
+		turn = _turn;
+		gameOver = false;
+		board = _board;
 	}
 	private void uncompressBoard()
 	{
@@ -82,7 +90,6 @@ class Board
 		if(!enPassant)
 			board.remove(-1);
 	}
-	
 	public void updatePossibleMoves()
 	{
 		for(GamePiece p: board.values())
@@ -234,27 +241,23 @@ class Board
 	{
 		return board.get(pos);
 	}
-	
 	public byte[] getCompressed()
 	{
 		return compressed;
 	}
-
 	public boolean turn()
 	{
 		return turn;
 	}
-
 	public boolean gameOver()
 	{
 		return gameOver;
 	}
-
-	public void toggleHackMode(){
+	public void toggleHackMode()
+	{
 		this.hackMode = !this.hackMode;
 		updatePossibleMoves();
 	}
-
 	// Returns 1939597999b9d9f9 9d1dfd3ddd5dbd7d 0525456585a5c5e581 01e121c141a161 00000000000001 for a starting board
 	private String compressedString()
 	{
@@ -264,7 +267,6 @@ class Board
 			ret += String.format("%02x", Byte.toUnsignedInt(b));
 		return ret;
 	}
-	
 	private String visualString(){
         final String border = "-------------------------";
         String board = border + "\n";
@@ -294,11 +296,8 @@ class Board
         
         return board;
     }
-
 	public String toString()
 	{
 		return compressedString();
 	}
-	
-    
 }
