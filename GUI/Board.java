@@ -74,7 +74,7 @@ class Board
 	{
 		HashMap<Integer, GamePiece> tempBoard;
 		HashSet<Integer> all;
-		ArrayList<Integer> illegal = new ArrayList<Integer>();
+		HashSet<Integer> illegal = new HashSet<Integer>();
 		for(GamePiece p: board.values())
 			if(possibleMoves.get(p) != null)
 			{
@@ -88,6 +88,14 @@ class Board
 					turn = !turn;
 					if(all.contains(tempBoard.get(turn? -2 : -3).getPos()))
 						illegal.add(to);
+				}
+				// Castling through check
+				if(p instanceof King)
+				{
+					if(possibleMoves.get(p).contains(p.getPos()-16) && illegal.contains(p.getPos()-8))
+						illegal.add(p.getPos()-16);
+					if(possibleMoves.get(p).contains(p.getPos()+16) && illegal.contains(p.getPos()+8))
+						illegal.add(p.getPos()+16);
 				}
 				possibleMoves.get(p).removeAll(illegal);
 				illegal.clear();
