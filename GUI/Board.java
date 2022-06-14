@@ -86,7 +86,7 @@ class Board
 					updatePossibleMoves(tempBoard);
 					all = allPossibleMoves(tempBoard, turn);
 					turn = !turn;
-					if(all.contains(board.get(turn? -2 : -3).getPos()))
+					if(all.contains(tempBoard.get(turn? -2 : -3).getPos()))
 						illegal.add(to);
 				}
 				possibleMoves.get(p).removeAll(illegal);
