@@ -100,7 +100,6 @@ class Board
 				possibleMoves.get(p).removeAll(illegal);
 				illegal.clear();
 			}
-		
 	}
 	private HashMap<Integer, GamePiece> cloneBoard()
 	{
@@ -211,6 +210,8 @@ class Board
 			turn = !turn;
 		updatePossibleMoves(board);
 		compressedChanged = true;
+		if(allPossibleMoves(board, turn).size() == 0)
+			gameOver = true;
 	}
 	// Accessor Methods
 	public GamePiece getPiece(int pos)
