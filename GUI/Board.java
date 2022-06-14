@@ -67,6 +67,23 @@ class Board
 			if(p != null && (p.isWhite() == turn || hackMode))
 				possibleMoves.put(p, p.possibleMoves(board));
 	}
+	private HashMap<Integer, GamePiece> cloneBoard()
+	{
+		HashMap<Integer, GamePiece> ret = new HashMap<Integer, GamePiece>();
+		for(int i: board.keySet())
+		{
+			try {
+				ret.put(i, board.get(i).clone());
+				if(board.get(i) == board.get(-1))
+					ret.put(-1, ret.get(i));
+				else if(board.get(i) == board.get(-2))
+					ret.put(-2, ret.get(i));
+				else if(board.get(i) == board.get(-3))
+					ret.put(-3, ret.get(i));
+			} catch(Exception e) {}	
+		}
+		return ret;
+	}
 	public HashSet<Integer> allPossibleMoves(boolean team)
 	{
 		HashSet<Integer> r = new HashSet<Integer>();
