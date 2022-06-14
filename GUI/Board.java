@@ -80,17 +80,17 @@ class Board
 		compressed = ce.compressBoardState(this);
 		compressedChanged = false;
 	}
-	private void updateBoardState(int from, int to)
+	private void updateBoardState(int from, int to, Board b)
 	{
-		GamePiece f = board.get(from);
-		GamePiece t = board.get(to % 64);
+		GamePiece f = b.board.get(from);
+		GamePiece t = b.board.get(to % 64);
 		GamePiece p;
 		byte control;
 		//Promoting
 		if(f instanceof Pawn && to%8 == (f.isWhite()? 0 : 7))
 		{
-			board.remove(from);
-			board.put(to%64, ((Pawn)f).promotedPiece(to));
+			b.board.remove(from);
+			b.board.put(to%64, ((Pawn)f).promotedPiece(to));
 			f.setPos(to%64);
 			f.moved();
 		}
@@ -98,24 +98,24 @@ class Board
 		else if(t == null)
 		{
 			to %= 64;
-			board.remove(from);
-			board.put(to, f);
+			b.board.remove(from);
+			b.board.put(to, f);
 			f.setPos(to);
 			f.moved();
 			// Pawn checks for En Passant
 			if(f instanceof Pawn)
 			{
-				p = board.get(-1);
+				p = b.board.get(-1);
 				if(p != null && to-p.getPos() == (f.isWhite()? -1: 1))
-					board.remove(p.getPos());
+					b.board.remove(p.getPos());
 				// Some idiot pawn is leaving En Passant up
 				if(to - from == (f.isWhite()? -2: 2))
-					board.put(-1, f);
+					b.board.put(-1, f);
 				else
-					board.remove(-1);
+					b.board.remove(-1);
 			}
 			else
-				board.remove(-1);
+				b.board.remove(-1);
 			
 			// Castling
 			if(f instanceof King)
@@ -123,17 +123,17 @@ class Board
 				to %= 64;
 				if(to-from == 16)
 				{
-					p = board.get(f.isWhite()? 63: 56);
-					board.remove(p.getPos());
-					board.put(p.getPos()-16, p);
+					p = b.board.get(f.isWhite()? 63: 56);
+					b.board.remove(p.getPos());
+					b.board.put(p.getPos()-16, p);
 					p.setPos(p.getPos()-16);
 					p.moved();
 				}
 				else if(to-from == -16)
 				{
-					p = board.get(f.isWhite()? 7: 0);
-					board.remove(p.getPos());
-					board.put(p.getPos()+24, p);
+					p = b.board.get(f.isWhite()? 7: 0);
+					b.board.remove(p.getPos());
+					b.board.put(p.getPos()+24, p);
 					p.setPos(p.getPos()+24);
 					p.moved();
 				}
@@ -143,9 +143,9 @@ class Board
 		else
 		{
 			to %= 64;
-			board.remove(from);
-			board.put(to, f);
-			board.remove(-1);
+			b.board.remove(from);
+			b.board.put(to, f);
+			b.board.remove(-1);
 			f.setPos(to);
 			f.moved();
 		}
@@ -153,7 +153,7 @@ class Board
 	// Assumes to -> from is a legal move
 	public void move(int from, int to)
 	{
-		updateBoardState(from, to);
+		updateBoardState(from, to, this);
 		if(!hackMode)
 			turn = !turn;
 		updatePossibleMoves();
