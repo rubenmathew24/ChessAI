@@ -47,7 +47,7 @@ class Board
         for(int i = 6; i<64; i +=8) board.put(i, new Pawn(i, false, true));
         
         updateCompressedState();
-        updatePossibleMoves();
+        updatePossibleMoves(board, false);
 	}
 
 	// Used by ChessEncoder to create Boards
@@ -59,13 +59,18 @@ class Board
 		possibleMoves = new HashMap<GamePiece, ArrayList<Integer>>();
 		compressed = _compressed;
 		compressedChanged = false;
-		updatePossibleMoves();
+		updatePossibleMoves(board, true);
 	}
-	public void updatePossibleMoves()
+	public void updatePossibleMoves(HashMap<Integer, GamePiece> board, boolean filter)
 	{
 		for(GamePiece p: board.values())
 			if(p != null && (p.isWhite() == turn || hackMode))
 				possibleMoves.put(p, p.possibleMoves(board));
+		if(filter)
+			filterPossibleMoves(board);
+		if(board != this.board)
+			for(GamePiece p: board.values())
+				possibleMoves.remove(p);
 	}
 	private HashMap<Integer, GamePiece> cloneBoard()
 	{
