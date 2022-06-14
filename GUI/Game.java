@@ -17,8 +17,6 @@ class Game{
 	
 	public void reset(){
 		gameBoard = new Board();
-		//turn = 1;
-		//moves = "";
 		promoting = false;
 		inCheck = false;
 		if(hax) gameBoard.toggleHackMode();
@@ -30,11 +28,10 @@ class Game{
 		return hax;
 	}
 
-	public void inCheck(){
-		inCheck = gameBoard.allPossibleMoves(gameBoard.board, !gameBoard.turn()).contains(gameBoard.board.get((gameBoard.turn()) ? -2 : -3).getPos()); //<>//
-		System.out.println(inCheck);
+	public void inCheck() {
+		this.inCheck = gameBoard.checkCzech();
 	}
-
+ //<>//
 	public void promote(int[] fromTo, int toPromote){
 		gameBoard.move(Game.toPos(fromTo[0],fromTo[1]),Game.toPos(fromTo[2],fromTo[3])+(64*toPromote));
 		promoting = false;
@@ -77,78 +74,31 @@ class Game{
 				return new int[]{-1,-1};
 			}
 		}
-		
+
 		return oldXY;
-		
-		
-
-		
-
-
-
-
-
-		/*int[] selected = {selectedX, selectedY};
-		
-		
-
-		GamePiece selectedPiece = GameBoard.getPiece(selectedX, selectedY);
-		GamePiece newPiece = GameBoard.getPiece(x, y);
-		
-		if(newPiece != null){
-			
-			//Nothing Selected
-			if(selectedPiece == null){
-				
-				//Select your piece
-				if(GameBoard.turn == newPiece.isWhite()){
-					selected = new int[]{x,y};
-				}
-				//Hax mode
-				//else if (hax){}
-			}
-			
-			//Already Have selected piece
-			else{
-				
-				//Deselect current piece
-				if(x == selectedX && y == selectedY){
-					selected = new int[]{-1,-1};
-				}
-				
-				//Select different piece
-				if(selectedPiece.isWhite() == GameBoard.turn){
-					selected = new int[]{x,y};
-				} 
-			}
-		}
-
-		
-		return selected;*/
-		//return null;
 	}
 
 	public void importBoardState(File file){
 		byte[] temp = new byte[39];
 		String line;
 		try(Scanner reader = new Scanner(file)){
-			line = reader.nextLine();
-			char[] c = line.toCharArray();
-			System.out.println(c.length + " " + line); // 78
-	
-			for(int i = 0; i < c.length; i+=2){
-				//temp[i/2] = Byte.parseByte(""+c[i]+c[i+1], 16);
-				temp[i/2] = (byte) ((Character.digit(c[i],16) << 4) + Character.digit(c[i+1], 16));
-				System.out.println(String.format("%2s",i/2) +": "+c[i]+c[i+1] + " = " + String.format("%8s", Integer.toBinaryString(Byte.toUnsignedInt(temp[i/2]))).replace(" ", "0")); //Debug
-			}
-			//for(int i = 0; i < temp.length; i++) System.out.println(Integer.toString(Byte.toUnsignedInt(temp[i]),2));
-		} catch(Exception e){
-			e.printStackTrace();
-		}
-		
-		gameBoard = new ChessEncoder().constructBoard(temp);
-		if(hax) gameBoard.toggleHackMode();
-		inCheck();
+    		line = reader.nextLine();
+    		char[] c = line.toCharArray();
+    		System.out.println(c.length + " " + line); // 78
+    
+    		for(int i = 0; i < c.length; i+=2){
+        		//temp[i/2] = Byte.parseByte(""+c[i]+c[i+1], 16);
+        		temp[i/2] = (byte) ((Character.digit(c[i],16) << 4) + Character.digit(c[i+1], 16));
+        		System.out.println(String.format("%2s",i/2) +": "+c[i]+c[i+1] + " = " + String.format("%8s", Integer.toBinaryString(Byte.toUnsignedInt(temp[i/2]))).replace(" ", "0")); //Debug
+    		}
+    		//for(int i = 0; i < temp.length; i++) System.out.println(Integer.toString(Byte.toUnsignedInt(temp[i]),2));
+    	} catch(Exception e){
+    		e.printStackTrace();
+    	}
+    	
+    	gameBoard = new ChessEncoder().constructBoard(temp);
+        if(hax) gameBoard.toggleHackMode();
+        inCheck();
 	}
 		
 

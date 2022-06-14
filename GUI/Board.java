@@ -232,6 +232,10 @@ class Board
 	{
 		return gameOver;
 	}
+	public boolean checkCzech(){
+		return allPossibleMoves(board, !turn).contains(board.get((turn) ? -2 : -3).getPos());
+    }
+
 	public void toggleHackMode()
 	{
 		this.hackMode = !this.hackMode;

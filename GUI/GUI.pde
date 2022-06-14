@@ -114,8 +114,8 @@ void mouseClicked(){
 	else if(mouseX >= boardOrigin + (8.5 * boxSize) && mouseX < boardOrigin + (9.5 * boxSize) && mouseY >= boardOrigin + (6.8 * boxSize) && mouseY < boardOrigin + (7.3 * boxSize)){
 		selectInput("Select a file to process:", "importGame");
 		
-		//Reset booleans
-		//gameFinished = false;
+		//Unselects
+		selected = new int[]{-1,-1};
 	}
 }
 
