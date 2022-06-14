@@ -39,7 +39,7 @@ abstract class GamePiece implements Cloneable
 	}
 	public String getImg()
 	{
-    	return img;
+		return img;
 	}
 	public boolean isWhite()
 	{

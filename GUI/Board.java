@@ -6,6 +6,7 @@ class Board
 {
 	private boolean turn;
 	private boolean gameOver;
+	public boolean mateType; // true if checkmate false if stalemate
 	private boolean hackMode;
 	private byte[] compressed;
 	public HashMap<Integer,GamePiece> board;
@@ -211,7 +212,10 @@ class Board
 		updatePossibleMoves(board);
 		compressedChanged = true;
 		if(allPossibleMoves(board, turn).size() == 0)
+		{
 			gameOver = true;
+			mateType = checkCzech();
+		}
 	}
 	// Accessor Methods
 	public GamePiece getPiece(int pos)

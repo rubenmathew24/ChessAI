@@ -148,6 +148,9 @@ public class ChessEncoder
 	{
 		int i = 0;
 		// First three bits are a header
+		boolean gameOver = getBit(i++, c) == 1;
+		if(gameOver)
+			return null;
 		boolean turn = getBit(i++,c) == 1;
 		boolean castlingPossible = getBit(i++, c) == 1;
 		boolean enPassantPossible = getBit(i++, c) == 1;
@@ -237,6 +240,14 @@ public class ChessEncoder
 		HashMap<Integer, GamePiece> board = b.board;
 		ArrayList<Integer> compressed = new ArrayList<Integer>();
 		// Header bits
+		// if game over don't compress board state
+		compressed.add(b.gameOver()? 1: 0);
+		if(b.gameOver())
+		{
+			compressed.add(b.mateType? 1: 0);
+			return toArray(compressed);
+		}
+		
 		compressed.add(b.turn()? 1 : 0);
 		
 		boolean L = (!board.get(-2).hasMoved() && board.get(7) instanceof Rook && !board.get(7).hasMoved());
