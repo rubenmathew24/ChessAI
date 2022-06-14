@@ -403,6 +403,13 @@ void promoteMenu(boolean pieceColor){
 //Method to put all pieces on the board
 void drawPieces(){	
 	for(GamePiece p : g.gameBoard.board.values()){
+    		if(p == g.gameBoard.board.get((g.gameBoard.turn() ? -2 : -3)) && g.inCheck){
+        		stroke(gridOutlineColor);
+    			strokeWeight(boxSize/40);
+        		fill(checkColor);
+            	rect(boardOrigin + (p.getX() * boxSize), boardOrigin + (p.getY() * boxSize), boxSize, boxSize);
+    		}
+    
         	PImage piece = loadImage(p.getImg());
             piece.resize(boxSize, boxSize);
             image(piece, boardOrigin + (p.getX() * boxSize), boardOrigin + (p.getY() * boxSize));

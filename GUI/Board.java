@@ -64,7 +64,7 @@ class Board
 	public void updatePossibleMoves(HashMap<Integer, GamePiece> board)
 	{
 		for(GamePiece p: board.values())
-			if(p != null && (p.isWhite() == turn || hackMode))
+			if(p != null) //&& (p.isWhite() == turn || hackMode))
 				possibleMoves.put(p, p.possibleMoves(board));
 		if(board == this.board)
 			filterPossibleMoves(board);

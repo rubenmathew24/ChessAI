@@ -5,6 +5,7 @@ class Game{
 	Board gameBoard;
 	public boolean hax = false; 
 	public boolean promoting = false;
+	public boolean inCheck = false;
 
 	//Reset Variables
 	//int turn; 
@@ -18,6 +19,8 @@ class Game{
 		gameBoard = new Board();
 		//turn = 1;
 		//moves = "";
+		promoting = false;
+		inCheck = false;
 		if(hax) gameBoard.toggleHackMode();
 	}
 
@@ -25,6 +28,11 @@ class Game{
 		hax = !hax;
 		gameBoard.toggleHackMode();
 		return hax;
+	}
+
+	public void inCheck(){
+		inCheck = gameBoard.allPossibleMoves(gameBoard.board, !gameBoard.turn()).contains(gameBoard.board.get((gameBoard.turn()) ? -2 : -3).getPos()); //<>//
+		System.out.println(inCheck);
 	}
 
 	public void promote(int[] fromTo, int toPromote){
@@ -65,6 +73,7 @@ class Game{
         		ChessEncoder ce = new ChessEncoder();
         		byte[] com = ce.compressBoardState(gameBoard);
         		System.out.println(ce.constructBoard(com).visualString());
+        		inCheck();
         		return new int[]{-1,-1};
     		}
     	}
@@ -139,6 +148,7 @@ class Game{
     	
     	gameBoard = new ChessEncoder().constructBoard(temp);
     	if(hax) gameBoard.toggleHackMode();
+    	inCheck();
 	}
 		
 
