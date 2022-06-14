@@ -16,38 +16,38 @@ class Board
 	//Default Constructor (New Game)
 	public Board()
 	{
-    	turn = true;
-    	gameOver = false;
-    	compressedChanged = true;
-    	board = new HashMap<Integer,GamePiece>();	
-    	possibleMoves = new HashMap<GamePiece, ArrayList<Integer>>();
-    
-    	// Black
-    	board.put(0, new Rook(0, false, false));
-    	board.put(8, new Knight(8, false, false));
-    	board.put(16, new Bishop(16, false, false));
-    	board.put(24, new Queen(24, false, false));
-    	board.put(32, new King(32, false, false)); board.put(-3, board.get(32));
-    	board.put(40, new Bishop(40, false, false));
-    	board.put(48, new Knight(48, false, false));
-    	board.put(56, new Rook(56, false, false));
-    
-    	for(int i = 1; i<64; i +=8) board.put(i, new Pawn(i, false, false));
-    
-    	// White
-        board.put(7, new Rook(7, false, true));
-        board.put(15, new Knight(15, false, true));
-        board.put(23, new Bishop(23, false, true));
-        board.put(31, new Queen(31, false, true));
-        board.put(39, new King(39, false, true)); board.put(-2, board.get(39));
-        board.put(47, new Bishop(47, false, true));
-        board.put(55, new Knight(55, false, true));
-        board.put(63, new Rook(63, false, true));
-    
-        for(int i = 6; i<64; i +=8) board.put(i, new Pawn(i, false, true));
-        
-        updateCompressedState();
-        updatePossibleMoves(board);
+		turn = true;
+		gameOver = false;
+		compressedChanged = true;
+		board = new HashMap<Integer,GamePiece>();	
+		possibleMoves = new HashMap<GamePiece, ArrayList<Integer>>();
+	
+		// Black
+		board.put(0, new Rook(0, false, false));
+		board.put(8, new Knight(8, false, false));
+		board.put(16, new Bishop(16, false, false));
+		board.put(24, new Queen(24, false, false));
+		board.put(32, new King(32, false, false)); board.put(-3, board.get(32));
+		board.put(40, new Bishop(40, false, false));
+		board.put(48, new Knight(48, false, false));
+		board.put(56, new Rook(56, false, false));
+	
+		for(int i = 1; i<64; i +=8) board.put(i, new Pawn(i, false, false));
+	
+		// White
+		board.put(7, new Rook(7, false, true));
+		board.put(15, new Knight(15, false, true));
+		board.put(23, new Bishop(23, false, true));
+		board.put(31, new Queen(31, false, true));
+		board.put(39, new King(39, false, true)); board.put(-2, board.get(39));
+		board.put(47, new Bishop(47, false, true));
+		board.put(55, new Knight(55, false, true));
+		board.put(63, new Rook(63, false, true));
+	
+		for(int i = 6; i<64; i +=8) board.put(i, new Pawn(i, false, true));
+		
+		updateCompressedState();
+		updatePossibleMoves(board);
 	}
 
 	// Used by ChessEncoder to create Boards
@@ -240,7 +240,7 @@ class Board
 	// Returns 1939597999b9d9f9 9d1dfd3ddd5dbd7d 0525456585a5c5e581 01e121c141a161 00000000000001 for a starting board
 	public String compressedString()
 	{
-    	if(compressedChanged) updateCompressedState();
+	if(compressedChanged) updateCompressedState();
 		String ret = "";
 		for(byte b: compressed)
 			//ret += Integer.toString(Byte.toUnsignedInt(b), 16);
@@ -248,34 +248,34 @@ class Board
 		return ret;
 	}
 	public String visualString(){
-        final String border = "-------------------------";
-        String board = border + "\n";
-        String temp = "|";
-        int counter = 0;
-        
-        for(int i = 0; i < 8; i++){
-            for(int j = 0; j < 8; j++){
-                GamePiece p = this.board.get(i+(8*j));
-                String piece = " ";
-        
-                //Check Piece letter
-                if(p instanceof Pawn)  piece = "P";
-                else if(p instanceof Bishop)piece = "B";
-                else if(p instanceof Knight)piece = "N";
-                else if(p instanceof Rook)  piece = "R";
-                else if(p instanceof King)  piece = "K";
-                else if(p instanceof Queen) piece = "Q";
-                
-                temp += ((p != null) ? ((p.isWhite()) ? "W" : "B") : " ") + piece + "|";
-                if (++counter % 8 == 0){
-                	board += temp + "\n" + border + "\n";
-            		temp = "|";
-                }
-    		}    
-    	}
-        
-        return board;
-    }
+		final String border = "-------------------------";
+		String board = border + "\n";
+		String temp = "|";
+		int counter = 0;
+		
+		for(int i = 0; i < 8; i++){
+			for(int j = 0; j < 8; j++){
+				GamePiece p = this.board.get(i+(8*j));
+				String piece = " ";
+		
+				//Check Piece letter
+				if(p instanceof Pawn)  piece = "P";
+				else if(p instanceof Bishop)piece = "B";
+				else if(p instanceof Knight)piece = "N";
+				else if(p instanceof Rook)  piece = "R";
+				else if(p instanceof King)  piece = "K";
+				else if(p instanceof Queen) piece = "Q";
+				
+				temp += ((p != null) ? ((p.isWhite()) ? "W" : "B") : " ") + piece + "|";
+				if (++counter % 8 == 0){
+					board += temp + "\n" + border + "\n";
+					temp = "|";
+				}
+			}	
+		}
+		
+		return board;
+	}
 	public String toString()
 	{
 		return compressedString();
