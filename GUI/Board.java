@@ -47,7 +47,7 @@ class Board
         for(int i = 6; i<64; i +=8) board.put(i, new Pawn(i, false, true));
         
         updateCompressedState();
-        updatePossibleMoves(board, false);
+        updatePossibleMoves(board);
 	}
 
 	// Used by ChessEncoder to create Boards
@@ -59,18 +59,40 @@ class Board
 		possibleMoves = new HashMap<GamePiece, ArrayList<Integer>>();
 		compressed = _compressed;
 		compressedChanged = false;
-		updatePossibleMoves(board, true);
+		updatePossibleMoves(board);
 	}
-	public void updatePossibleMoves(HashMap<Integer, GamePiece> board, boolean filter)
+	public void updatePossibleMoves(HashMap<Integer, GamePiece> board)
 	{
 		for(GamePiece p: board.values())
 			if(p != null && (p.isWhite() == turn || hackMode))
 				possibleMoves.put(p, p.possibleMoves(board));
-		if(filter)
+		if(board == this.board)
 			filterPossibleMoves(board);
-		if(board != this.board)
-			for(GamePiece p: board.values())
-				possibleMoves.remove(p);
+	}
+	
+	private void filterPossibleMoves(HashMap<Integer, GamePiece> board)
+	{
+		HashMap<Integer, GamePiece> tempBoard;
+		HashSet<Integer> all;
+		ArrayList<Integer> illegal = new ArrayList<Integer>();
+		for(GamePiece p: board.values())
+			if(possibleMoves.get(p) != null)
+			{
+				for(Integer to : possibleMoves.get(p))
+				{
+					tempBoard = cloneBoard();
+					updateBoardState(p.getPos(), to, tempBoard);
+					turn = !turn;
+					updatePossibleMoves(tempBoard);
+					all = allPossibleMoves(tempBoard, turn);
+					turn = !turn;
+					if(all.contains(board.get(turn? -2 : -3).getPos()))
+						illegal.add(to);
+				}
+				possibleMoves.get(p).removeAll(illegal);
+				illegal.clear();
+			}
+		
 	}
 	private HashMap<Integer, GamePiece> cloneBoard()
 	{
@@ -89,10 +111,11 @@ class Board
 		}
 		return ret;
 	}
-	public HashSet<Integer> allPossibleMoves(boolean team)
+	
+	public HashSet<Integer> allPossibleMoves(HashMap<Integer, GamePiece> board, boolean team)
 	{
 		HashSet<Integer> r = new HashSet<Integer>();
-		for(GamePiece p: possibleMoves.keySet())
+		for(GamePiece p: board.values())
 			if(p.isWhite() == team)
 				r.addAll(possibleMoves.get(p));
 		return r;
@@ -178,7 +201,7 @@ class Board
 		updateBoardState(from, to, board);
 		if(!hackMode)
 			turn = !turn;
-		updatePossibleMoves();
+		updatePossibleMoves(board);
 		compressedChanged = true;
 	}
 	// Accessor Methods
@@ -203,7 +226,7 @@ class Board
 	public void toggleHackMode()
 	{
 		this.hackMode = !this.hackMode;
-		updatePossibleMoves();
+		updatePossibleMoves(board);
 	}
 	// Returns 1939597999b9d9f9 9d1dfd3ddd5dbd7d 0525456585a5c5e581 01e121c141a161 00000000000001 for a starting board
 	public String compressedString()
