@@ -31,7 +31,7 @@ class Game{
 	public void inCheck() {
 		this.inCheck = gameBoard.checkCzech();
 	}
- //<>//
+ //<>// //<>//
 	public void promote(int[] fromTo, int toPromote){
 		gameBoard.move(Game.toPos(fromTo[0],fromTo[1]),Game.toPos(fromTo[2],fromTo[3])+(64*toPromote));
 		promoting = false;
@@ -69,7 +69,7 @@ class Game{
 				System.out.println("Legal Move");
 				ChessEncoder ce = new ChessEncoder();
 				byte[] com = ce.compressBoardState(gameBoard);
-				System.out.println(ce.constructBoard(com).visualString());
+				if(!gameBoard.gameOver()) System.out.println(ce.constructBoard(com).visualString());
 				inCheck();
 				return new int[]{-1,-1};
 			}

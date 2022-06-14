@@ -25,6 +25,7 @@ color darkColor = color(125,148,93);
 color selectedColor = color(200,200,50); 
 color captureColor = color(184, 117, 112); 
 color checkColor = color(102, 5, 5);
+color staleColor = color(191,170,61);
 color circleColor = color(180);
 color moveOutlineColor = color(100);
 color gridOutlineColor = moveOutlineColor;
@@ -41,7 +42,7 @@ void setup() {
 	size(2000, 2000); //Intial window size because processing doesn't allow variable parameters for size()
 	surface.setSize(sizeConstants[0], sizeConstants[1]);
 	background(0);
-	frameRate(30); //How many times a second to call draw()
+	frameRate(10); //How many times a second to call draw()
 }
 
 //What is drawn each frame
@@ -69,6 +70,9 @@ void draw() {
 	
 	//Draw Pieces
 	drawPieces();
+
+	//Game Over Indicator
+	if(g.gameBoard.gameOver()) gameOver(g.gameBoard.mateType);
 }
 
 //Called when there is a Mouse Click event
@@ -127,29 +131,12 @@ void handlePromote(int toPromote){
   // Bishop - 3
   g.promote(promoting, toPromote);
   resetIndicators();
-  //boolean success = g.promote(toPromote);
-  /*if(success) {
-    
-    //Handles Promotion menu
-    promoting = false;
-    stroke(0);
-    fill(0);
-    rect(boardOrigin + (8.1*boxSize), boardOrigin, boxSize, 4*boxSize);
-    
-    if(g.checkForMate()){
-      King kC = g.GameBoard.getKing(g.GameBoard.getTurn());
-      gameOver(kC.inCheck);
-    }
-  }
-  else error();*/
 }
 
 void resetIndicators(){
-	//Handles Promotion menu
-    stroke(0);
-    strokeWeight(boxSize/20);
-    fill(0);
-    rect(boardOrigin + (8.1*boxSize), boardOrigin, boxSize, 4*boxSize);
+  	stroke(0);	
+  	fill(0);
+  	rect(0,0,width,height);
 }
 
 //Method to create Hack Mode button
@@ -232,6 +219,7 @@ void importGame(File game) {
 		
 		//Has Game Object import game in chosen file
 		g.importBoardState(game);
+		resetIndicators();
 		System.out.println("\nImport Successful");
 	}
 }
@@ -267,6 +255,32 @@ void restartButton(){
 	//Text
 	fill(lightColor);
 	text("New Game", buttonOrigin + (0.3 * boxSize), boardOrigin + (7.85 * boxSize));
+}
+
+void gameOver(boolean checkmate){
+  //Variables
+  float buttonOrigin = boardOrigin + (8.5 * boxSize);
+  
+  //Setup
+  stroke(200);
+  textSize(boxSize/3);
+  
+  //indicator
+  color indicator = (checkmate) ? checkColor : staleColor;
+  fill(indicator);
+  rect(buttonOrigin, boardOrigin + (0 * boxSize), 2.3*boxSize, boxSize/2);
+  
+  //Text
+  stroke(200);
+  fill(labelColor);
+  if(checkmate) text("Checkmate", buttonOrigin + (0.29 * boxSize), boardOrigin + (0.36 * boxSize));
+  else text("Stalemate", buttonOrigin + (0.3 * boxSize), boardOrigin + (0.36 * boxSize));
+  
+  if(checkmate){
+    String winner = (!g.gameBoard.turn()) ? "White" : "Black";
+    text(winner+ " Wins", buttonOrigin + (0.3 * boxSize), boardOrigin + (1.0 * boxSize));
+  } else text("Draw", buttonOrigin + (0.4 * boxSize), boardOrigin + (1.0 * boxSize));
+
 }
 
 //Method that draws the 8x8 board
@@ -314,9 +328,6 @@ void grid() {
 		}
 	}
 }
-
-//Creates Game Over notification: Checkmate (with winner) or Stalemate
-//void gameOver(boolean checkmate){}
 
 //Method that Highlights the selected piece as well as possible moves and captures
 void selectedPieceGUI(){

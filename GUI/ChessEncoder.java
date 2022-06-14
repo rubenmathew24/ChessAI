@@ -148,9 +148,9 @@ public class ChessEncoder
 	{
 		int i = 0;
 		// First three bits are a header
-		boolean gameOver = getBit(i++, c) == 1;
-		if(gameOver)
-			return null;
+		//boolean gameOver = getBit(i++, c) == 1;
+		//if(gameOver)
+		//	return null;
 		boolean turn = getBit(i++,c) == 1;
 		boolean castlingPossible = getBit(i++, c) == 1;
 		boolean enPassantPossible = getBit(i++, c) == 1;
