@@ -25,15 +25,18 @@ public class ChessEncoder
 			leaf = true;
 		}
 	}
-	// private Node[] trees; (to be implemented for further compression of endgame board states
+	private Node[] trees; //to be implemented for further compression of endgame board states
 	private Node tree;
-	private HashMap<Class, Integer> treeIndex;	
+	private HashMap<Class, Integer> treeIndex;
+	private HashMap<Node, HashMap<Class, Integer>> indices;
 	public ChessEncoder()
 	{
 		constructTree();
 	}
 	private void constructTree()
 	{
+		trees = new Node[2];
+		
 		tree = new Node();
 		Node empty = new Node((GamePiece)null);
 		Node K = new Node(new King(-1, false, true)), k = new Node(new King(-1, false, false));
@@ -285,38 +288,7 @@ public class ChessEncoder
 			{
 				compressed.add(1);
 				compressed.add(p.isWhite()? 1: 0);
-				switch(treeIndex.get(p.getClass()))
-				{
-				case 0b0:
-					compressed.add(0);
-					break;
-				case 0b100:
-					compressed.add(1);
-					compressed.add(0);
-					compressed.add(0);
-					break;
-				case 0b101:
-					compressed.add(1);
-					compressed.add(0);
-					compressed.add(1);
-					break;
-				case 0b110:
-					compressed.add(1);
-					compressed.add(1);
-					compressed.add(0);
-					break;
-				case 0b1110:
-					compressed.add(1);
-					compressed.add(1);
-					compressed.add(1);
-					compressed.add(0);
-					break;
-				case 0b1111:
-					compressed.add(1);
-					compressed.add(1);
-					compressed.add(1);
-					compressed.add(1);
-				}
+				addBinaryNumber(treeIndex.get(p.getClass()), compressed);
 			}
 		}
 		return toArray(compressed);
@@ -341,5 +313,12 @@ public class ChessEncoder
 				ret[i/8] |= (1 << (8 - i%8 -1));
 		}
 		return ret;
+	}
+	private void addBinaryNumber(int bin, ArrayList<Integer> ls)
+	{
+		int bit;
+		for(bit = 1; bin >> bit > 0; bit++);
+		for(int i = bit-1; i >= 0; i--)
+			ls.add(bin >> i & 0b1);
 	}
 }
