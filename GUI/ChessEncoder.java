@@ -25,19 +25,17 @@ public class ChessEncoder
 			leaf = true;
 		}
 	}
-	private Node[] trees; //to be implemented for further compression of endgame board states
-	private Node tree;
-	private HashMap<Class, Integer> treeIndex;
-	private HashMap<Node, HashMap<Class, Integer>> indices;
+	private Node[] trees; // to be implemented for further compression of endgame board states
+	private HashMap<Node, HashMap<Class, Integer>> indices; //stores Maps of the indexes of classes in a specific tree;
 	public ChessEncoder()
 	{
-		constructTree();
-	}
-	private void constructTree()
-	{
 		trees = new Node[2];
-		
-		tree = new Node();
+		indices = new HashMap<Node, HashMap<Class, Integer>>();
+		trees[0] = constructMainTree();
+	}
+	private Node constructMainTree()
+	{		
+		Node root = new Node();
 		Node empty = new Node((GamePiece)null);
 		Node K = new Node(new King(-1, false, true)), k = new Node(new King(-1, false, false));
 		Node Q = new Node(new Queen(-1, false, true)), q = new Node(new Queen(-1, false, false));
@@ -48,7 +46,7 @@ public class ChessEncoder
 		
 		Node t1;
 		
-		t1 = tree;
+		t1 = root;
 		
 		t1.left = empty;
 		empty.parent = t1;
@@ -97,7 +95,7 @@ public class ChessEncoder
 		//------------------------------------------------
 		// Black Pieces
 		//------------------------------------------------
-		t1 = tree.right;
+		t1 = root.right;
 		
 		t1.left = new Node(t1);
 		t1 = t1.left;
@@ -137,7 +135,7 @@ public class ChessEncoder
 		t1.right = k;
 		k.parent = t1;
 		
-		treeIndex = new HashMap<Class, Integer>();
+		HashMap<Class, Integer> treeIndex = new HashMap<Class, Integer>();
 		
 		treeIndex.put(null, 0);
 		treeIndex.put(Pawn.class, 0b0);
@@ -146,14 +144,22 @@ public class ChessEncoder
 		treeIndex.put(Knight.class, 0b110);
 		treeIndex.put(Queen.class, 0b1110);
 		treeIndex.put(King.class, 0b1111);
+		
+		indices.put(root, treeIndex);
+		return root;
 	}
 	public Board constructBoard(byte[] c)
 	{
 		int i = 0;
-		// First three bits are a header
-		//boolean gameOver = getBit(i++, c) == 1;
-		//if(gameOver)
-		//	return null;
+		boolean gameOver = getBit(i++, c) == 1;
+		if(gameOver)
+			return null;
+		// Next (TODO: ADD bits to header) bits dictate which pieces are left on the board, and hence which tree to use
+		// boolean pawnsExist = getBit(i++,c) == 1;
+		// int treeInd = ... ((rooksExist? 1:0)<<1) + (pawnsExist? 1 : 0)
+		// Node tree = trees[treeInd];
+		Node tree = trees[0]; // Currently only using general tree to encode until more trees are implemented
+		// Next three bits are a header
 		boolean turn = getBit(i++,c) == 1;
 		boolean castlingPossible = getBit(i++, c) == 1;
 		boolean enPassantPossible = getBit(i++, c) == 1;
@@ -237,9 +243,11 @@ public class ChessEncoder
 		}
 		return new Board(turn, board, c);
 	}
-	
+	// TODO: change Board constructor and fields for whether there are certain pieces remaining
 	public byte[] compressBoardState(Board b)
 	{
+		// Once board constructor changed remove this code and update it
+		Node tree = trees[0];
 		HashMap<Integer, GamePiece> board = b.board;
 		ArrayList<Integer> compressed = new ArrayList<Integer>();
 		// Header bits
@@ -288,7 +296,7 @@ public class ChessEncoder
 			{
 				compressed.add(1);
 				compressed.add(p.isWhite()? 1: 0);
-				addBinaryNumber(treeIndex.get(p.getClass()), compressed);
+				addBinaryNumber(indices.get(tree).get(p.getClass()), compressed);
 			}
 		}
 		return toArray(compressed);
