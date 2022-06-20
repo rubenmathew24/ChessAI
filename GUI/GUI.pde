@@ -90,7 +90,7 @@ void mouseClicked(){
 	} 
 	
 	//Check if its on the reset button
-	else if(mouseX >= boardOrigin + (8.5 * boxSize) && mouseX < boardOrigin + (10.8 * boxSize) && mouseY >= boardOrigin + (7.5 * boxSize) && mouseY < boardOrigin + (8 * boxSize)){
+    else if(inSquare(mouseX, mouseY, 8.5, 7.5, 2.3, 0.5)){
 		g.reset();
 		resetIndicators();
 		
@@ -99,28 +99,32 @@ void mouseClicked(){
 	}
 	
 	//Check if its on the hax button
-    else if(mouseX >= boardOrigin + (8.5 * boxSize) && mouseX < boardOrigin + (10.8 * boxSize) && mouseY >= boardOrigin + (6.1 * boxSize) && mouseY < boardOrigin + (6.6 * boxSize)){
+    else if(inSquare(mouseX, mouseY, 8.5, 6.1, 2.3, 0.5)){
 		g.hack();
     }
 
 	//If Promoting
-  	else if(g.promoting && mouseX >= boardOrigin + (8.1 * boxSize) && mouseX < boardOrigin + (9.1 * boxSize) && mouseY >= boardOrigin && mouseY < boardOrigin + (4*boxSize)){
+    else if(g.promoting && inSquare(mouseX, mouseY, 8.1, 0, 1, 4)){
     	handlePromote(y);
   	}
 
 	//Allow Export of game
-	else if(mouseX >= boardOrigin + (9.8 * boxSize) && mouseX < boardOrigin + (10.8 * boxSize) && mouseY >= boardOrigin + (6.8 * boxSize) && mouseY < boardOrigin + (7.3 * boxSize)){
+    else if(inSquare(mouseX, mouseY, 9.8, 6.8, 1, 0.5)){
     	selectOutput("Choose a name for Exported Game", "exportGame");	
 		System.out.println("\nExport Successful");
 	}
 	
 	//Allow Import of game
-	else if(mouseX >= boardOrigin + (8.5 * boxSize) && mouseX < boardOrigin + (9.5 * boxSize) && mouseY >= boardOrigin + (6.8 * boxSize) && mouseY < boardOrigin + (7.3 * boxSize)){
+    else if(inSquare(mouseX, mouseY, 8.5, 6.8, 1, 0.5)){
 		selectInput("Select a file to process:", "importGame");
 		
 		//Unselects
 		selected = new int[]{-1,-1};
 	}
+}
+
+boolean inSquare(float pointX, float pointY, float X, float Y, float W, float H){
+	return (pointX >= boardOrigin + (X * boxSize) && pointX < boardOrigin + ((X+W) * boxSize) && pointY >= boardOrigin + (Y * boxSize) && pointY < boardOrigin + ((Y+H) * boxSize));
 }
 
 void handlePromote(int toPromote){
