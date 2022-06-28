@@ -2,3 +2,7 @@
 *.autosave
 *.txt
 /Saved Games/
+/GUI/out
+/.idea
+GUI/GUI.iml
+/GUI/.idea

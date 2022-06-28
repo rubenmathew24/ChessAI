@@ -8,10 +8,10 @@ class Board
 	private boolean gameOver;
 	public boolean mateType; // true if checkmate false if stalemate
 	private boolean hackMode;
-	private byte[] compressed;
 	public HashMap<Integer,GamePiece> board;
 	public HashMap<GamePiece, ArrayList<Integer>> possibleMoves;
 	private static ChessEncoder ce = new ChessEncoder();
+	private CompressedState cs;
 	private boolean compressedChanged;
 	
 	//Default Constructor (New Game)
@@ -46,7 +46,7 @@ class Board
 		board.put(63, new Rook(63, false, true));
 	
 		for(int i = 6; i<64; i +=8) board.put(i, new Pawn(i, false, true));
-		
+		cs = new CompressedState();
 		updateCompressedState();
 		updatePossibleMoves(board);
 	}
@@ -58,7 +58,7 @@ class Board
 		gameOver = false;
 		board = _board;
 		possibleMoves = new HashMap<GamePiece, ArrayList<Integer>>();
-		compressed = _compressed;
+		cs = new CompressedState(_compressed);
 		compressedChanged = false;
 		updatePossibleMoves(board);
 	}
@@ -130,7 +130,7 @@ class Board
 	}
 	private void updateCompressedState()
 	{
-		compressed = ce.compressBoardState(this);
+		cs.compressed = ce.compressBoardState(this);
 		compressedChanged = false;
 	}
 	private void updateBoardState(int from, int to, HashMap<Integer,GamePiece> board)
@@ -226,7 +226,7 @@ class Board
 	{
 		if(compressedChanged)
 			updateCompressedState();
-		return compressed;
+		return cs.compressed;
 	}
 	public boolean turn()
 	{
@@ -250,7 +250,7 @@ class Board
 	{
 	if(compressedChanged) updateCompressedState();
 		String ret = "";
-		for(byte b: compressed)
+		for(byte b: cs.compressed)
 			//ret += Integer.toString(Byte.toUnsignedInt(b), 16);
 			ret += String.format("%02x", Byte.toUnsignedInt(b));
 		return ret;
