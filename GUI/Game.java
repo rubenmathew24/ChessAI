@@ -7,12 +7,18 @@ class Game{
 	public boolean promoting = false;
 	public boolean inCheck = false;
 
+    //AI Settings
+    final boolean AIActive = false; // T/F to turn AI on/off
+    final boolean AIColor = false; // T/F AI color white/black
+	Larry Lawrry;
+
 	//Reset Variables
 	//int turn; 
 	//String moves;
 	
 	public Game(){
 		reset();
+		if(AIActive) Lawrry = new Larry(this, AIColor);    
 	}
 	
 	public void reset(){
@@ -38,7 +44,6 @@ class Game{
 	}
 
 	public int[] pieceSelected(int[] newXY, int[] oldXY){
-		
 		GamePiece selected = gameBoard.getPiece(toPos(oldXY));
 		GamePiece newPiece = gameBoard.getPiece(toPos(newXY));
 		
@@ -54,7 +59,7 @@ class Game{
 		}
 		//Clicked Own Piece
 		if(newPiece != null && (newPiece.isWhite() == gameBoard.turn() || hax)){
-			System.out.println(newPiece);
+			//System.out.println(newPiece);
 			return newXY;
 		}
 		//Clicked Enemy Piece with nothing selected
@@ -66,11 +71,15 @@ class Game{
 				promoting = true;
 			} else {
 				gameBoard.move(toPos(oldXY), toPos(newXY));
-				System.out.println("Legal Move");
-				ChessEncoder ce = new ChessEncoder();
-				byte[] com = ce.compressBoardState(gameBoard);
-				if(!gameBoard.gameOver()) System.out.println(ce.constructBoard(com).visualString());
 				inCheck();
+				System.out.println("Legal Move");
+				
+				if(AIActive){
+    				Lawrry.move();
+                	System.out.println("AI Legal Move");
+				}
+
+                inCheck();
 				return new int[]{-1,-1};
 			}
 		}

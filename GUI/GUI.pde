@@ -10,10 +10,6 @@ final int[] sizeConstants = {1250, 1000,100}; //width, height, size of board squ
 final int boxSize = sizeConstants[2]; //Sets for easy variable usage in equations
 final int boardOrigin = ((sizeConstants[0]/2)-(4*boxSize))/2; //Centers it then adjusts it a little to give room to menu on right
 
-//AI Settings
-boolean AIActive = false; // T/F to turn AI on/off
-boolean AIColor = true; // T/F AI color white/black
-
 //Game Variables
 int[] selected = {-1,-1}; //Stores X,Y of currently selected piece //{-1,-1} if nothing selected
 int[] promoting = {-1,-1,-1,-1}; //Stores X,Y of promoting piece, and X,Y of destination //{-1,-1,-1,-1} if nothing selected
@@ -35,6 +31,7 @@ color haxIndicatorOff = color(255,0,0);
 
 //Game Object
 Game g = new Game(); //Game Object
+
 
 //Run at Start
 void setup() {
