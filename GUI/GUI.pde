@@ -312,11 +312,15 @@ void grid() {
 	
 	//Rank labels
 	for(int rank = 7; rank >= 0; rank--){
+    	squareCol = (rank % 2 == 0) ? darkColor : lightColor;
+        fill(squareCol);
 		text(rankValues[rank], boardOrigin+(txtSize/4), boardOrigin+(rank*boxSize)+txtSize+(txtSize/10));
 	}
 
 	//File labels
 	for(int file = 0; file < 8; file++){
+    	squareCol = (file % 2 == 0) ? lightColor : darkColor;
+        fill(squareCol);
 		switch(file){
     		case 6:
                 text(fileValues[file], boardOrigin+((file+1)*boxSize)-(txtSize)+(txtSize/3), end-(txtSize/3)); //Only here because 'g' goes lower than other chars
