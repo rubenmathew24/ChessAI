@@ -9,7 +9,7 @@ class Board
 	public boolean mateType; // true if checkmate false if stalemate
 	private boolean hackMode;
 	public HashMap<Integer,GamePiece> board;
-	public HashMap<Integer, ArrayList<Integer>> possibleMoves;
+	public HashMap<GamePiece, ArrayList<Integer>> possibleMoves;
 	private static ChessEncoder ce = new ChessEncoder();
 	private CompressedState cs;
 	private boolean compressedChanged;
@@ -21,7 +21,7 @@ class Board
 		gameOver = false;
 		compressedChanged = true;
 		board = new HashMap<Integer,GamePiece>();	
-		possibleMoves = new HashMap<Integer, ArrayList<Integer>>();
+		possibleMoves = new HashMap<GamePiece, ArrayList<Integer>>();
 	
 		// Black
 		board.put(0, new Rook(0, false, false));
@@ -57,18 +57,16 @@ class Board
 		turn = _turn;
 		gameOver = false;
 		board = _board;
-		possibleMoves = new HashMap<Integer, ArrayList<Integer>>();
+		possibleMoves = new HashMap<GamePiece, ArrayList<Integer>>();
 		cs = new CompressedState(_compressed);
 		compressedChanged = false;
 		updatePossibleMoves(board);
 	}
 	public void updatePossibleMoves(HashMap<Integer, GamePiece> board)
 	{
-		for(Integer i: board.keySet())
-			if(board.get(i) != null) //&& (p.isWhite() == turn || hackMode))
-				possibleMoves.put(i, board.get(i).possibleMoves(board));
-			else
-				possibleMoves.remove(i);
+		for(GamePiece p: board.values())
+			if(p != null) //&& (p.isWhite() == turn || hackMode))
+				possibleMoves.put(p, p.possibleMoves(board));
 		if(board == this.board)
 			filterPossibleMoves(board);
 	}
@@ -78,16 +76,11 @@ class Board
 		HashMap<Integer, GamePiece> tempBoard;
 		HashSet<Integer> all;
 		HashSet<Integer> illegal = new HashSet<Integer>();
-		for(Integer i: board.keySet())
-		{
-			if(board.get(i) == null)
-				continue;
-			GamePiece p = board.get(i);
-			if(possibleMoves.get(i) != null)
+		for(GamePiece p: board.values())
+			if(possibleMoves.get(p) != null)
 			{
-				for(Integer to : possibleMoves.get(i))
+				for(Integer to : possibleMoves.get(p))
 				{
-					
 					tempBoard = cloneBoard();
 					updateBoardState(p.getPos(), to, tempBoard);
 					turn = !turn;
@@ -100,15 +93,14 @@ class Board
 				// Castling through check
 				if(p instanceof King)
 				{
-					if(possibleMoves.get(i).contains(p.getPos()-16) && illegal.contains(p.getPos()-8))
+					if(possibleMoves.get(p).contains(p.getPos()-16) && illegal.contains(p.getPos()-8))
 						illegal.add(p.getPos()-16);
-					if(possibleMoves.get(i).contains(p.getPos()+16) && illegal.contains(p.getPos()+8))
+					if(possibleMoves.get(p).contains(p.getPos()+16) && illegal.contains(p.getPos()+8))
 						illegal.add(p.getPos()+16);
 				}
-				possibleMoves.get(i).removeAll(illegal);
+				possibleMoves.get(p).removeAll(illegal);
 				illegal.clear();
 			}
-		}
 	}
 	private HashMap<Integer, GamePiece> cloneBoard()
 	{
@@ -131,9 +123,9 @@ class Board
 	public HashSet<Integer> allPossibleMoves(HashMap<Integer, GamePiece> board, boolean team)
 	{
 		HashSet<Integer> r = new HashSet<Integer>();
-		for(Integer i: board.keySet())
-			if(board.get(i) != null && board.get(i).isWhite() == team)
-				r.addAll(possibleMoves.get(i));
+		for(GamePiece p: board.values())
+			if(p.isWhite() == team)
+				r.addAll(possibleMoves.get(p));
 		return r;
 	}
 	private void updateCompressedState()

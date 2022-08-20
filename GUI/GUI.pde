@@ -350,7 +350,7 @@ void selectedPieceGUI(){
     stroke(moveOutlineColor);
     
     //Mark all legal moves of the selected piece
-    for(int pos : g.gameBoard.possibleMoves.get(selectedPos)){
+    for(int pos : g.gameBoard.possibleMoves.get(selectedPiece)){
         //X,Y of the move's ending square
         int[] moveTo = Game.toXY(pos%64);
         

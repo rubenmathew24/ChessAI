@@ -19,7 +19,7 @@ class Larry
 	}
 
 	public void move(){
-		HashMap<Integer, ArrayList<Integer>> moves = g.gameBoard.possibleMoves;
+		HashMap<GamePiece, ArrayList<Integer>> moves = g.gameBoard.possibleMoves;
 		int to = -1;
 
 		//Generate Moves
