@@ -1,5 +1,9 @@
 import java.util.Scanner;
 import java.io.File;
+import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.ArrayList;
 
 class Game{
 	Board gameBoard;
@@ -11,6 +15,9 @@ class Game{
     final boolean AIActive = false; // T/F to turn AI on/off
     final boolean AIColor = false; // T/F AI color white/black
 	Larry Lawrry;
+
+	//Debug Variable
+	private int tempFileNum=0;
 
 	//Reset Variables
 	//int turn; 
@@ -30,7 +37,7 @@ class Game{
 
 	public boolean hack(){
 		hax = !hax;
-		gameBoard.toggleHackMode();
+		gameBoard.toggleHackMode(); //<>//
 		return hax;
 	}
 
@@ -74,6 +81,9 @@ class Game{
 				inCheck();
 				System.out.println("Legal Move");
 				
+				logPossibleMoves(gameBoard.possibleMoves);
+				System.out.println(gameBoard.visualString());
+
 				if(AIActive){
     				Lawrry.move();
                 	System.out.println("AI Legal Move");
@@ -124,4 +134,29 @@ class Game{
 	public static int[] toXY(int pos){
 		return new int[]{pos/8, pos%8};
 	}
+
+	public static String getArrString(ArrayList<Integer> arr, String delim)
+    {
+        String temp = "";
+        for(Integer t: arr)
+            temp += t+""+delim;
+        return temp+"\n";
+    }
+
+	public void logPossibleMoves(HashMap<Integer, ArrayList<Integer>> moves){ 
+        try{ 
+            File file = new File("C:\\Users\\ruben\\OneDrive\\Desktop\\moves"+tempFileNum+".txt");
+            file.createNewFile();
+            PrintWriter writer = new PrintWriter(file);
+            System.out.println("All Moves:");
+            for(Map.Entry<Integer, ArrayList<Integer>> entry : moves.entrySet()){
+            writer.print(gameBoard.board.get(entry.getKey()) + " From: " + entry.getKey() + " To: ");
+            writer.print(getArrString(entry.getValue(), ", ") + "\n");
+        }
+            tempFileNum++;
+            writer.close();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 }
