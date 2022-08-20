@@ -89,8 +89,6 @@ class Board
 					turn = !turn;
 					if(all.contains(tempBoard.get(turn? -2 : -3).getPos()))
 						illegal.add(to);
-					for(GamePiece k: tempBoard.values())
-						possibleMoves.remove(k);
 				}
 				// Castling through check
 				if(p instanceof King)
@@ -103,9 +101,12 @@ class Board
 				possibleMoves.get(p).removeAll(illegal);
 				illegal.clear(); //<>//
 			}
+		ArrayList<GamePiece> unalivedPieces = new ArrayList<GamePiece>();
 		for(GamePiece p: possibleMoves.keySet())
 			if(!board.values().contains(p))
-				possibleMoves.remove(p);
+				unalivedPieces.add(p);
+		for(GamePiece p: unalivedPieces)
+			possibleMoves.remove(p);
 	}
 	private HashMap<Integer, GamePiece> cloneBoard()
 	{
