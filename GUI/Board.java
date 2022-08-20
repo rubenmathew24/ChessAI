@@ -103,6 +103,9 @@ class Board
 				possibleMoves.get(p).removeAll(illegal);
 				illegal.clear(); //<>//
 			}
+		for(GamePiece p: possibleMoves.keySet())
+			if(!board.values().contains(p))
+				possibleMoves.remove(p);
 	}
 	private HashMap<Integer, GamePiece> cloneBoard()
 	{
