@@ -49,7 +49,7 @@ class Game{
 		gameBoard.move(Game.toPos(fromTo[0],fromTo[1]),Game.toPos(fromTo[2],fromTo[3])+(64*toPromote));
 		
 		promoting = false;
-		if(AIActive) Lawrry.move();
+		if(AIActive && !gameBoard.gameOver()) Lawrry.move();
 	}
 
 	public int[] pieceSelected(int[] newXY, int[] oldXY){
@@ -87,7 +87,7 @@ class Game{
 				//logPossibleMoves(gameBoard.possibleMoves);
 				//System.out.println(gameBoard.visualString());
 
-				if(AIActive){
+				if(AIActive && !gameBoard.gameOver()){
     				Lawrry.move();
                 	System.out.println("AI Legal Move");
 				}
