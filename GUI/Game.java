@@ -51,7 +51,7 @@ class Game{
 		if(newPiece == selected) return new int[]{-1,-1};
 		//Handle Hax mode capturing (Since technically all pieces are your pieces)
 		if(hax) {
-			if (newPiece != null && selected != null && gameBoard.possibleMoves.get(selected).contains(toPos(newXY))) {
+			if (newPiece != null && selected != null && gameBoard.possibleMoves.get(toPos(oldXY)).contains(toPos(newXY))) {
 				//Moves
 				gameBoard.move(toPos(oldXY), toPos(newXY));
 				return new int[]{-1,-1};
@@ -65,7 +65,7 @@ class Game{
 		//Clicked Enemy Piece with nothing selected
 		if(newPiece != null && selected == null) return new int[]{-1,-1};
 		//Clicked Occupied or Empty Square with selected Piece
-		if(selected != null && gameBoard.possibleMoves.get(selected).contains(toPos(newXY))) {
+		if(selected != null && gameBoard.possibleMoves.get(toPos(oldXY)).contains(toPos(newXY))) {
 			//Moves
 			if(selected instanceof Pawn && newXY[1] == (selected.isWhite()? 0 : 7)){
 				promoting = true;
