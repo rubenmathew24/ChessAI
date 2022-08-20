@@ -67,6 +67,8 @@ class Board
 		for(Integer i: board.keySet())
 			if(board.get(i) != null) //&& (p.isWhite() == turn || hackMode))
 				possibleMoves.put(i, board.get(i).possibleMoves(board));
+			else
+				possibleMoves.remove(i);
 		if(board == this.board)
 			filterPossibleMoves(board);
 	}
