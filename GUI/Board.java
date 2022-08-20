@@ -101,7 +101,7 @@ class Board
 						illegal.add(p.getPos()+16);
 				}
 				possibleMoves.get(p).removeAll(illegal);
-				illegal.clear();
+				illegal.clear(); //<>//
 			}
 	}
 	private HashMap<Integer, GamePiece> cloneBoard()
@@ -218,6 +218,7 @@ class Board
 			gameOver = true;
 			mateType = checkCzech();
 		}
+		//System.out.println("Turn: " + (this.turn ? "White" : "Black"));
 	}
 	// Accessor Methods
 	public GamePiece getPiece(int pos)

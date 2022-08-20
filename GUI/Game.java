@@ -12,7 +12,7 @@ class Game{
 	public boolean inCheck = false;
 
     //AI Settings
-    final boolean AIActive = false; // T/F to turn AI on/off
+    final boolean AIActive = true; // T/F to turn AI on/off
     final boolean AIColor = false; // T/F AI color white/black
 	Larry Lawrry;
 
@@ -37,7 +37,7 @@ class Game{
 
 	public boolean hack(){
 		hax = !hax;
-		gameBoard.toggleHackMode(); //<>//
+		gameBoard.toggleHackMode(); //<>// //<>//
 		return hax;
 	}
 
@@ -47,7 +47,9 @@ class Game{
  //<>// //<>//
 	public void promote(int[] fromTo, int toPromote){
 		gameBoard.move(Game.toPos(fromTo[0],fromTo[1]),Game.toPos(fromTo[2],fromTo[3])+(64*toPromote));
+		
 		promoting = false;
+		if(AIActive) Lawrry.move();
 	}
 
 	public int[] pieceSelected(int[] newXY, int[] oldXY){
@@ -81,8 +83,9 @@ class Game{
 				inCheck();
 				System.out.println("Legal Move");
 				
-				logPossibleMoves(gameBoard.possibleMoves);
-				System.out.println(gameBoard.visualString());
+				//Debug
+				//logPossibleMoves(gameBoard.possibleMoves);
+				//System.out.println(gameBoard.visualString());
 
 				if(AIActive){
     				Lawrry.move();
@@ -143,14 +146,14 @@ class Game{
         return temp+"\n";
     }
 
-	public void logPossibleMoves(HashMap<Integer, ArrayList<Integer>> moves){ 
+	public void logPossibleMoves(HashMap<GamePiece, ArrayList<Integer>> moves){ 
         try{ 
             File file = new File("C:\\Users\\ruben\\OneDrive\\Desktop\\moves"+tempFileNum+".txt");
             file.createNewFile();
             PrintWriter writer = new PrintWriter(file);
             System.out.println("All Moves:");
-            for(Map.Entry<Integer, ArrayList<Integer>> entry : moves.entrySet()){
-            writer.print(gameBoard.board.get(entry.getKey()) + " From: " + entry.getKey() + " To: ");
+            for(Map.Entry<GamePiece, ArrayList<Integer>> entry : moves.entrySet()){
+            writer.print(entry.getKey() + " From: " + entry.getKey().getPos() + " To: ");
             writer.print(getArrString(entry.getValue(), ", ") + "\n");
         }
             tempFileNum++;
