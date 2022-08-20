@@ -89,6 +89,8 @@ class Board
 					turn = !turn;
 					if(all.contains(tempBoard.get(turn? -2 : -3).getPos()))
 						illegal.add(to);
+					for(GamePiece k: tempBoard.values())
+						possibleMoves.remove(k);
 				}
 				// Castling through check
 				if(p instanceof King)
