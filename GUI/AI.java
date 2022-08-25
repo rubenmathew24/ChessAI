@@ -117,6 +117,7 @@ class Larry
 		HashMap<GamePiece, ArrayList<Integer>> moves = g.gameBoard.possibleMoves;
 		int[] move = findBestMove(moves);
 		g.gameBoard.move(move[0], move[1]);
+		System.out.println("Evaluation: "+evaluateBoardState(g.gameBoard.board));
 		/*
 		//Generate Moves
 		GamePiece[] keys = new GamePiece[1];
@@ -141,7 +142,7 @@ class Larry
 	private int[] findBestMove(HashMap<GamePiece, ArrayList<Integer>> moves)
 	{
 		int[] move = new int[2];
-		double bestEval = -314, eval;
+		double bestEval = 314, eval;
 		HashMap<Integer, GamePiece> tempBoard;
 		for(GamePiece p: moves.keySet())
 			if(p.pieceColor == team)
@@ -150,7 +151,7 @@ class Larry
 					tempBoard = g.gameBoard.cloneBoard();
 					g.gameBoard.updateBoardState(p.getPos(), i, tempBoard);
 					eval = evaluateBoardState(tempBoard);
-					if(bestEval < eval)
+					if(bestEval > eval)
 					{
 						bestEval = eval;
 						move[0] = p.getPos();
@@ -168,7 +169,7 @@ class Larry
 		{
 			value += (p.isWhite()? 1: -1) * pieceVals.get(p.getClass());
 			evalIndex = p.isWhite()? p.getPos() : 8*p.getX() + (7 - p.getY());
-			value += offsets.get(p.getClass()).get(evalIndex);
+			value += (p.isWhite()? 1: -1) * offsets.get(p.getClass()).get(evalIndex);
 		}
 		return value;
 	}
