@@ -1,21 +1,118 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Map;
-import java.io.File;
-import java.io.PrintWriter;
+import java.util.*;
 
 class Larry
 {
+	HashMap<Class, Integer> pieceVals;
+	HashMap<Class, ArrayList<Double>> offsets;
 	Game g;
-	boolean team;    
-    
+	boolean team;
 	public Larry(Game g_, boolean team_){
 		this.g = g_;
 		this.team = team_;
+		initializeEvals();
+		initializeOffsets();
 	}
-
+	
+	private void initializeEvals()
+	{
+		pieceVals = new HashMap<Class, Integer>();
+		pieceVals.put(King.class, 0);
+		pieceVals.put(Pawn.class, 1);
+		pieceVals.put(Knight.class, 3);
+		pieceVals.put(Bishop.class, 3);
+		pieceVals.put(Rook.class, 5);
+		pieceVals.put(Queen.class, 9);
+	}
+	
+	private void initializeOffsets()
+	{
+		Double[] pieceOffsets;
+		offsets = new HashMap<Class, ArrayList<Double>>();
+		//King
+		pieceOffsets = new Double[] {
+				-3.0, -3.0, -3.0, -3.0, -2.0, -1.0, 2.0, 2.0,
+				-4.0, -4.0, -4.0, -4.0, -3.0, -2.0, 2.0, 3.0,
+				-4.0, -4.0, -4.0, -4.0, -3.0, -2.0, 0.0, 1.0,
+				-5.0, -5.0, -5.0, -5.0, -4.0, -2.0, 0.0, 0.0,
+				-5.0, -5.0, -5.0, -5.0, -4.0, -2.0, 0.0, 0.0,
+				-4.0, -4.0, -4.0, -4.0, -3.0, -2.0, 0.0, 1.0,
+				-4.0, -4.0, -4.0, -4.0, -3.0, -2.0, 2.0, 3.0,
+				-3.0, -3.0, -3.0, -3.0, -2.0, -1.0, 2.0, 2.0
+				};
+		offsets.put(King.class, new ArrayList<Double>());
+		offsets.get(King.class).addAll(Arrays.asList(pieceOffsets));
+		
+		//Queen
+		pieceOffsets = new Double[] {
+				-2.0, -1.0, -1.0, -0.5, 0.0, -1.0, -1.0, -2.0,
+				-1.0, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, -1.0,
+				-1.0, 0.0, 0.5, 0.5, 0.5, 0.5, 0.5, -1.0,
+				-0.5, 0.0, 0.5, 0.5, 0.5, 0.5, 0.0, -0.5,
+				-0.5, 0.0, 0.5, 0.5, 0.5, 0.5, 0.0, -0.5,
+				-1.0, 0.0, 0.5, 0.5, 0.5, 0.5, 0.0, -1.0,
+				-1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0,
+				-2.0, -1.0, -1.0, -0.5, -0.5, -1.0, -1.0, -2.0,
+		};
+		offsets.put(Queen.class, new ArrayList<Double>());
+		offsets.get(Queen.class).addAll(Arrays.asList(pieceOffsets));
+		
+		//Rook
+		pieceOffsets = new Double[] {
+				0.0, 0.5, -0.5, -0.5, -0.5, -0.5, -0.5, 0.0,
+				0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+				0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+				0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.5,
+				0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.5,
+				0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+				0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+				0.0, 0.5, -0.5, -0.5, -0.5, -0.5, -0.5, 0.0,
+		};
+		offsets.put(Rook.class, new ArrayList<Double>());
+		offsets.get(Rook.class).addAll(Arrays.asList(pieceOffsets));
+		
+		//Bishop
+		pieceOffsets = new Double[] {
+				-2.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -2.0,
+				-1.0, 0.0, 0.0, 0.5, 0.0, 1.0, 0.5, -1.0,
+				-1.0, 0.0, 0.5, 0.5, 1.0, 1.0, 0.0, -1.0,
+				-1.0, 0.0, 1.0, 1.0, 1.0, 1.0, 0.0, -1.0,
+				-1.0, 0.0, 1.0, 1.0, 1.0, 1.0, 0.0, -1.0,
+				-1.0, 0.0, 0.5, 0.5, 1.0, 1.0, 0.0, -1.0,
+				-1.0, 0.0, 0.0, 0.5, 0.0, 1.0, 0.5, -1.0,
+				-2.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -2.0
+		};
+		offsets.put(Bishop.class, new ArrayList<Double>());
+		offsets.get(Bishop.class).addAll(Arrays.asList(pieceOffsets));
+		
+		//Knight
+		pieceOffsets = new Double[] {
+				-5.0, -4.0, -3.0, -3.0, -3.0, -3.0, -4.0, -5.0,
+				-4.0, -2.0, 0.0, 0.5, 0.0, 0.5, -2.0, -4.0,
+				-3.0, 0.0, 1.0, 1.5, 1.5, 1.0, 0.0, -3.0,
+				-3.0, 0.0, 1.5, 2.0, 2.0, 1.5, 0.5, -3.0,
+				-3.0, 0.0, 1.5, 2.0, 2.0, 1.5, 0.5, -3.0,
+				-3.0, 0.0, 1.0, 1.5, 1.5, 1.0, 0.0, -3.0,
+				-4.0, -2.0, 0.0, 0.5, 0.0, 0.5, -2.0, -4.0,
+				-5.0, -4.0, -3.0, -3.0, -3.0, -3.0, -4.0, -5.0
+		};
+		offsets.put(Knight.class, new ArrayList<Double>());
+		offsets.get(Knight.class).addAll(Arrays.asList(pieceOffsets));
+		
+		//Pawn
+		pieceOffsets = new Double[] {
+				0.0, 5.0, 1.0, 0.5, 0.0, 0.5, 0.5, 0.0,
+				0.0, 5.0, 1.0, 0.5, 0.0, -0.5, 1.0, 0.0,
+				0.0, 5.0, 2.0, 1.0, 0.0, -1.0, 1.0, 0.0,
+				0.0, 5.0, 3.0, 2.5, 2.0, 0.0, -2.0, 0.0,
+				0.0, 5.0, 3.0, 2.5, 2.0, 0.0, -2.0, 0.0,
+				0.0, 5.0, 2.0, 1.0, 0.0, -1.0, 1.0, 0.0,
+				0.0, 5.0, 1.0, 0.5, 0.0, -0.5, 1.0, 0.0,
+				0.0, 5.0, 1.0, 0.5, 0.0, 0.5, 0.5, 0.0
+		};
+		offsets.put(Pawn.class, new ArrayList<Double>());
+		offsets.get(Pawn.class).addAll(Arrays.asList(pieceOffsets));
+	}
+	
 	public void move(){
 		HashMap<GamePiece, ArrayList<Integer>> moves = g.gameBoard.possibleMoves;
 		int to = -1;
@@ -36,5 +133,17 @@ class Larry
 		}
 		System.out.println("\nAI MOVE:\n" + random + "From: " + random.getPos() + " To: " + to);
 		g.gameBoard.move(random.getPos(), to);
+	}
+	
+	private int evaluateBoardState(HashMap<Integer,GamePiece> b)
+	{
+		int value = 0, evalIndex = -1;
+		for(GamePiece p: b.values())
+		{
+			value += (p.isWhite()? 1: -1) * pieceVals.get(p.getClass());
+			evalIndex = p.isWhite()? p.getPos() : 8*p.getX() + (7 - p.getY());
+			value += offsets.get(p.getClass()).get(evalIndex);
+		}
+		return value;
 	}
 }
