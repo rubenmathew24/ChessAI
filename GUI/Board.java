@@ -108,7 +108,7 @@ class Board
 		for(GamePiece p: unalivedPieces)
 			possibleMoves.remove(p);
 	}
-	private HashMap<Integer, GamePiece> cloneBoard()
+	public HashMap<Integer, GamePiece> cloneBoard()
 	{
 		HashMap<Integer, GamePiece> ret = new HashMap<Integer, GamePiece>();
 		for(int i: board.keySet())
@@ -139,7 +139,7 @@ class Board
 		cs.compressed = ce.compressBoardState(this);
 		compressedChanged = false;
 	}
-	private void updateBoardState(int from, int to, HashMap<Integer,GamePiece> board)
+	public void updateBoardState(int from, int to, HashMap<Integer,GamePiece> board)
 	{
 		GamePiece f = board.get(from);
 		GamePiece t = board.get(to % 64);

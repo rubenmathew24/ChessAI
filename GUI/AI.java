@@ -115,8 +115,9 @@ class Larry
 	
 	public void move(){
 		HashMap<GamePiece, ArrayList<Integer>> moves = g.gameBoard.possibleMoves;
-		int to = -1;
-
+		int[] move = findBestMove(moves);
+		g.gameBoard.move(move[0], move[1]);
+		/*
 		//Generate Moves
 		GamePiece[] keys = new GamePiece[1];
 		keys = moves.keySet().toArray(keys);
@@ -126,18 +127,43 @@ class Larry
 			ArrayList<Integer> vals = moves.get(random);
 			to = (vals == null || vals.size()<1) ? -1 : vals.get((int)(Math.random()*vals.size()));
 		}while(random.pieceColor != team || to == -1);
-
+		
 		//Make Move
 		for(Map.Entry<Integer, GamePiece> me : g.gameBoard.board.entrySet()){
     		if(me.getValue() == random) System.out.println("Key in board: " + me.getKey());
 		}
 		System.out.println("\nAI MOVE:\n" + random + "From: " + random.getPos() + " To: " + to);
 		g.gameBoard.move(random.getPos(), to);
+		*/
+		
 	}
 	
-	private int evaluateBoardState(HashMap<Integer,GamePiece> b)
+	private int[] findBestMove(HashMap<GamePiece, ArrayList<Integer>> moves)
 	{
-		int value = 0, evalIndex = -1;
+		int[] move = new int[2];
+		double bestEval = -314, eval;
+		HashMap<Integer, GamePiece> tempBoard;
+		for(GamePiece p: moves.keySet())
+			if(p.pieceColor == team)
+				for(Integer i: moves.get(p))
+				{
+					tempBoard = g.gameBoard.cloneBoard();
+					g.gameBoard.updateBoardState(p.getPos(), i, tempBoard);
+					eval = evaluateBoardState(tempBoard);
+					if(bestEval < eval)
+					{
+						bestEval = eval;
+						move[0] = p.getPos();
+						move[1] = i;
+					}
+				}
+		return move;
+	}
+	
+	private double evaluateBoardState(HashMap<Integer,GamePiece> b)
+	{
+		double value = 0;
+		int evalIndex = -1;
 		for(GamePiece p: b.values())
 		{
 			value += (p.isWhite()? 1: -1) * pieceVals.get(p.getClass());
