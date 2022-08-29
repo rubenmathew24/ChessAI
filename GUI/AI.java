@@ -118,24 +118,6 @@ class Larry
 		int[] move = findBestMove(moves);
 		g.gameBoard.move(move[0], move[1]);
 		System.out.println("Evaluation: "+evaluateBoardState(g.gameBoard.board));
-		/*
-		//Generate Moves
-		GamePiece[] keys = new GamePiece[1];
-		keys = moves.keySet().toArray(keys);
-		GamePiece random;
-		do{
-			random = keys[(int)(Math.random()*keys.length)];
-			ArrayList<Integer> vals = moves.get(random);
-			to = (vals == null || vals.size()<1) ? -1 : vals.get((int)(Math.random()*vals.size()));
-		}while(random.pieceColor != team || to == -1);
-		
-		//Make Move
-		for(Map.Entry<Integer, GamePiece> me : g.gameBoard.board.entrySet()){
-    		if(me.getValue() == random) System.out.println("Key in board: " + me.getKey());
-		}
-		System.out.println("\nAI MOVE:\n" + random + "From: " + random.getPos() + " To: " + to);
-		g.gameBoard.move(random.getPos(), to);
-		*/
 		
 	}
 	
@@ -161,6 +143,27 @@ class Larry
 		return move;
 	}
 	
+	private int[] generateRandomMove(HashMap<GamePiece, ArrayList<Integer>> moves)
+	{
+        //Generate Moves
+        GamePiece[] keys = new GamePiece[1];
+        int to;
+        keys = moves.keySet().toArray(keys);
+        GamePiece random;
+        do{
+            random = keys[(int)(Math.random()*keys.length)];
+            ArrayList<Integer> vals = moves.get(random);
+            to = (vals == null || vals.size()<1) ? -1 : vals.get((int)(Math.random()*vals.size()));
+        }while(random.pieceColor != team || to == -1);
+        
+        //Make Move
+        for(Map.Entry<Integer, GamePiece> me : g.gameBoard.board.entrySet()){
+            if(me.getValue() == random) System.out.println("Key in board: " + me.getKey());
+        }
+        return new int[]{random.getPos(), to};
+        
+	}
+
 	private double evaluateBoardState(HashMap<Integer,GamePiece> b)
 	{
 		double value = 0;
