@@ -6,6 +6,7 @@ class Larry
 	HashMap<Class, ArrayList<Double>> offsets;
 	Game g;
 	boolean team;
+
 	public Larry(Game g_, boolean team_){
 		this.g = g_;
 		this.team = team_;
@@ -115,25 +116,25 @@ class Larry
 	
 	public void move(){
 		HashMap<GamePiece, ArrayList<Integer>> moves = g.gameBoard.possibleMoves;
-		int[] move = findBestMove(moves);
+		int[] move = findBestMove(moves, this.team);
 		g.gameBoard.move(move[0], move[1]);
 		System.out.println("Evaluation: "+evaluateBoardState(g.gameBoard.board));
 		
 	}
 	
-	private int[] findBestMove(HashMap<GamePiece, ArrayList<Integer>> moves)
+	private int[] findBestMove(HashMap<GamePiece, ArrayList<Integer>> moves, boolean player)
 	{
 		int[] move = new int[2];
-		double bestEval = 314, eval;
+		double bestEval = -314, eval;
 		HashMap<Integer, GamePiece> tempBoard;
 		for(GamePiece p: moves.keySet())
-			if(p.pieceColor == team)
+			if(p.pieceColor == player)
 				for(Integer i: moves.get(p))
 				{
 					tempBoard = g.gameBoard.cloneBoard();
 					g.gameBoard.updateBoardState(p.getPos(), i, tempBoard);
-					eval = evaluateBoardState(tempBoard);
-					if(bestEval > eval)
+					eval = (player ? 1 : -1) * evaluateBoardState(tempBoard);
+					if(bestEval < eval)
 					{
 						bestEval = eval;
 						move[0] = p.getPos();
@@ -143,7 +144,7 @@ class Larry
 		return move;
 	}
 	
-	private int[] generateRandomMove(HashMap<GamePiece, ArrayList<Integer>> moves)
+	private int[] generateRandomMove(HashMap<GamePiece, ArrayList<Integer>> moves, boolean player)
 	{
         //Generate Moves
         GamePiece[] keys = new GamePiece[1];
@@ -154,7 +155,7 @@ class Larry
             random = keys[(int)(Math.random()*keys.length)];
             ArrayList<Integer> vals = moves.get(random);
             to = (vals == null || vals.size()<1) ? -1 : vals.get((int)(Math.random()*vals.size()));
-        }while(random.pieceColor != team || to == -1);
+        }while(random.pieceColor != player || to == -1);
         
         //Make Move
         for(Map.Entry<Integer, GamePiece> me : g.gameBoard.board.entrySet()){
