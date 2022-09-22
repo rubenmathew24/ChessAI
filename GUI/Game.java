@@ -13,7 +13,7 @@ class Game{
 
     //AI Settings
     final boolean AIActive = true; // T/F to turn AI on/off
-    final boolean AIColor = false; // T/F AI color white/black
+    final boolean AIColor = true; // T/F AI color white/black
 	Larry Lawrry;
 
 	//Debug Variable
@@ -24,8 +24,8 @@ class Game{
 	//String moves;
 	
 	public Game(){
+    	if(AIActive) Lawrry = new Larry(this, AIColor);    
 		reset();
-		if(AIActive) Lawrry = new Larry(this, AIColor);    
 	}
 	
 	public void reset(){
@@ -33,6 +33,7 @@ class Game{
 		promoting = false;
 		inCheck = false;
 		if(hax) gameBoard.toggleHackMode();
+		if(AIActive && AIColor) Lawrry.move();
 	}
 
 	public boolean hack(){
