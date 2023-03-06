@@ -6,6 +6,7 @@ class Larry
 	HashMap<Class, ArrayList<Double>> offsets;
 	Game g;
 	boolean team;
+	final private int MAX_DEPTH = 3;
 
 	public Larry(Game g_, boolean team_){
 		this.g = g_;
@@ -116,12 +117,13 @@ class Larry
 	
 	public void move(){
 		HashMap<GamePiece, ArrayList<Integer>> moves = g.gameBoard.possibleMoves;
-		int[] move = findBestMove(moves, this.team);
-		g.gameBoard.move(move[0], move[1]);
+		//int[] move = findBestMove(moves, this.team);
+		double[] move = alphaBetaPruning(g.gameBoard.getCompressed(), 0, new int[]{-1,-1}, Double.MIN_VALUE, Double.MAX_VALUE);
+		g.gameBoard.move((int)move[0], (int)move[1]);
 		System.out.println("Evaluation: "+evaluateBoardState(g.gameBoard.board));
-		
 	}
 	
+	//Finds best move for current board state (no look ahead)
 	private int[] findBestMove(HashMap<GamePiece, ArrayList<Integer>> moves, boolean player)
 	{
 		int[] move = new int[2];
@@ -144,6 +146,7 @@ class Larry
 		return move;
 	}
 	
+	//Gives a random move from possible moves in given board state
 	private int[] generateRandomMove(HashMap<GamePiece, ArrayList<Integer>> moves, boolean player)
 	{
         //Generate Moves
@@ -163,6 +166,42 @@ class Larry
         }
         return new int[]{random.getPos(), to};
         
+	}
+
+	
+	//Returns {moveCurrent, moveNew, eval}
+	private double[] alphaBetaPruning(byte[] board, int currentDepth, int[] move, double alpha, double beta){
+    	//Decompress board
+    	Board current = g.gameBoard.ce.constructBoard(board);
+    
+    	//if max depth reached, report evaluation and initial move that started branch
+    	if(currentDepth >= MAX_DEPTH) return new double[] {move[0], move[1], (this.team ? 1 : -1) * evaluateBoardState(current.board)};
+    	
+   		Board tempBoard; 
+   		double v;
+   
+    	for(GamePiece p: current.possibleMoves.keySet()){
+            if(p.pieceColor == current.turn()){
+                for(Integer i: current.possibleMoves.get(p)){
+                	if(currentDepth == 0) move = new int[]{p.getPos(), i};
+                
+                	tempBoard = g.gameBoard.ce.constructBoard(board);
+                    tempBoard.move(p.getPos(), i);
+                	v = alphaBetaPruning(tempBoard.getCompressed(), currentDepth+1, move, alpha, beta)[2];
+                
+                	//Maximizing
+                	if(current.turn() == this.team && v > alpha) alpha = v;
+                
+                	//Minimizing
+                	else if(current.turn() != this.team && v < beta) beta = v;
+                
+                	if (alpha >= beta) break; 
+                }
+            }
+    	}
+    
+    	if(current.turn() == this.team) return new double[]{move[0], move[1], alpha};
+    	return new double[]{move[0], move[1], beta};
 	}
 
 	private double evaluateBoardState(HashMap<Integer,GamePiece> b)

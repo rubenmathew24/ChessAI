@@ -10,7 +10,7 @@ class Board
 	private boolean hackMode;
 	public HashMap<Integer,GamePiece> board;
 	public HashMap<GamePiece, ArrayList<Integer>> possibleMoves;
-	private static ChessEncoder ce = new ChessEncoder();
+	public static ChessEncoder ce = new ChessEncoder();
 	private CompressedState cs;
 	private boolean compressedChanged;
 	
