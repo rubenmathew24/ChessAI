@@ -361,7 +361,7 @@ void selectedPieceGUI(){
         } 
         
         //En Passant
-        else if(g.gameBoard.board.get(-1) != null && selectedPiece != g.gameBoard.board.get(-1) && pos-g.gameBoard.board.get(-1).getPos() == (selectedPiece.isWhite()? -1 : 1)){
+        else if(g.gameBoard.board.get(-1) != null && selectedPiece != g.gameBoard.board.get(-1) && pos-g.gameBoard.board.get(-1).getPos() == (selectedPiece.isWhite()? -1 : 1) && selectedPiece instanceof Pawn){
         	fill(captureColor);
             rect(boardOrigin + (moveTo[0] * boxSize), boardOrigin + (moveTo[1] * boxSize), boxSize, boxSize);
             fill(circleColor);
