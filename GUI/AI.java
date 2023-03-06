@@ -120,31 +120,31 @@ class Larry
 		//int[] move = findBestMove(moves, this.team);
 		double[] move = alphaBetaPruning(g.gameBoard.getCompressed(), 0, new int[]{-1,-1}, Double.MIN_VALUE, Double.MAX_VALUE);
 		g.gameBoard.move((int)move[0], (int)move[1]);
-		System.out.println("Evaluation: "+evaluateBoardState(g.gameBoard.board));
+		System.out.println("Evaluation: "+evaluateBoardState(g.gameBoard));
 	}
 	
 	//Finds best move for current board state (no look ahead)
-	private int[] findBestMove(HashMap<GamePiece, ArrayList<Integer>> moves, boolean player)
-	{
-		int[] move = new int[2];
-		double bestEval = -314, eval;
-		HashMap<Integer, GamePiece> tempBoard;
-		for(GamePiece p: moves.keySet())
-			if(p.pieceColor == player)
-				for(Integer i: moves.get(p))
-				{
-					tempBoard = g.gameBoard.cloneBoard();
-					g.gameBoard.updateBoardState(p.getPos(), i, tempBoard);
-					eval = (player ? 1 : -1) * evaluateBoardState(tempBoard);
-					if(bestEval < eval)
-					{
-						bestEval = eval;
-						move[0] = p.getPos();
-						move[1] = i;
-					}
-				}
-		return move;
-	}
+	//private int[] findBestMove(HashMap<GamePiece, ArrayList<Integer>> moves, boolean player)
+	//{
+	//	int[] move = new int[2];
+	//	double bestEval = -314, eval;
+	//	HashMap<Integer, GamePiece> tempBoard;
+	//	for(GamePiece p: moves.keySet())
+	//		if(p.pieceColor == player)
+	//			for(Integer i: moves.get(p))
+	//			{
+	//				tempBoard = g.gameBoard.cloneBoard();
+	//				g.gameBoard.updateBoardState(p.getPos(), i, tempBoard);
+	//				eval = (player ? 1 : -1) * evaluateBoardState(tempBoard);
+	//				if(bestEval < eval)
+	//				{
+	//					bestEval = eval;
+	//					move[0] = p.getPos();
+	//					move[1] = i;
+	//				}
+	//			}
+	//	return move;
+	//}
 	
 	//Gives a random move from possible moves in given board state
 	private int[] generateRandomMove(HashMap<GamePiece, ArrayList<Integer>> moves, boolean player)
@@ -175,7 +175,7 @@ class Larry
     	Board current = g.gameBoard.ce.constructBoard(board);
     
     	//if max depth reached, report evaluation and initial move that started branch
-    	if(currentDepth >= MAX_DEPTH) return new double[] {move[0], move[1], (this.team ? 1 : -1) * evaluateBoardState(current.board)};
+    	if(currentDepth >= MAX_DEPTH) return new double[] {move[0], move[1], evaluateBoardState(current)};
     	
    		Board tempBoard; 
    		double v;
@@ -198,14 +198,21 @@ class Larry
                 	if (alpha >= beta) break; 
                 }
             }
+            if (alpha >= beta) break;
     	}
     
     	if(current.turn() == this.team) return new double[]{move[0], move[1], alpha};
     	return new double[]{move[0], move[1], beta};
 	}
 
-	private double evaluateBoardState(HashMap<Integer,GamePiece> b)
+	private double evaluateBoardState(Board board)
 	{
+		HashMap<Integer, GamePiece> b = board.board;
+		if(board.gameOver())
+			if(board.mateType)
+				return (board.turn()? -1: 1) * 1000000;
+			else
+				return (board.turn()? -1: 1) * -5000;
 		double value = 0;
 		int evalIndex = -1;
 		for(GamePiece p: b.values())
